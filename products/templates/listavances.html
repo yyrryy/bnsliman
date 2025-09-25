@@ -418,7 +418,7 @@
   populateyears()
   function deleteavanceclient(event, avanceid){
         alertify.prompt( 'Confirmer', 'Mot de pass', 'Prompt Value'
-               , function(evt, value) { if (value=='ORGHAD'){
+               , function(evt, value) { if (value=='TESTPASS'){
                     $.get('/products/deleteavanceclient', {
                         'avanceid':avanceid
                     }, (data)=>{

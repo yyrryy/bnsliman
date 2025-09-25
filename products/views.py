@@ -428,7 +428,7 @@ def addoneproduct(request):
             block=block,
             carlogos_id=logo,
             isactive=False,
-            farahref='fr-'+ref
+            farahref='lu-'+ref
         )
         if isfarah:
             product.frsellprice=sellprice
@@ -590,7 +590,7 @@ def updateproduct(request):
         product.sellprice=sellprice
         product.remisesell=remise
     
-    product.farahref='fr-'+ref
+    product.farahref='lu-'+ref
     #product.prixnet=netprice
     product.name=request.POST.get('name')
     # product.cars=json.dumps(request.POST.getlist('cars'))
@@ -672,12 +672,12 @@ def getlowbycategory(request):
     #products = Product.objects.filter(category_id=category_id, stock__lte=F('minstock'), originsupp_id=supplierid)
     isfarah=target=='f'
     if isfarah:
-        products = Produit.objects.filter(category_id=category, stocktotalfarah__lte=F('minstock')).annotate(
-        is_preferred_supplier=Case(
-            When(froriginsupp_id=supplierid, then=Value(True)),
-            default=Value(False),
-            output_field=BooleanField(),
-        )).order_by('-is_preferred_supplier')
+        products = Produit.objects.filter(category_id=category, stocktotalfarah__lte=F('minstock'))#annotate(
+        # is_preferred_supplier=Case(
+        #     When(froriginsupp_id=supplierid, then=Value(True)),
+        #     default=Value(False),
+        #     output_field=BooleanField(),
+        # )).order_by('-is_preferred_supplier')
         marks=set([i.mark for i in products])
         marks=[{"name":i.name if i else '', 'id':i.id if i else ''} for i in marks]
         ctx={
@@ -688,12 +688,13 @@ def getlowbycategory(request):
         'data':render(request, 'fralertstocktrs.html', ctx).content.decode('utf-8')
     })
     else:
-        products = Produit.objects.filter(category_id=category, stocktotalorgh__lte=F('minstock')).annotate(
-        is_preferred_supplier=Case(
-            When(originsupp_id=supplierid, then=Value(True)),
-            default=Value(False),
-            output_field=BooleanField(),
-        )).order_by('-is_preferred_supplier')
+        products = Produit.objects.filter(category_id=category, stocktotalorgh__lte=F('minstock'))
+        # annotate(
+        # is_preferred_supplier=Case(
+        #     When(originsupp_id=supplierid, then=Value(True)),
+        #     default=Value(False),
+        #     output_field=BooleanField(),
+        # )).order_by('-is_preferred_supplier')
     #suppliers=Supplier.objects.all()
     marks=set([i.mark for i in products])
     marks=[{"name":i.name if i else '', 'id':i.id if i else ''} for i in marks]
@@ -734,18 +735,14 @@ def recevoir(request):
     target=request.GET.get('target')
     isfarah=target=='f'
     lastid=Itemsbysupplier.objects.last()
-    print(lastid)
     if lastid:
         lastid=lastid.id
     else:
         lastid=0
     if isfarah:
-        bonno=f'FR-BA00{lastid+1}'
-
-
+        bonno=f'LU-BA00{lastid+1}'
     else:
         bonno=f'BA00{lastid+1}'
-
     print('>>>>>>', bonno)
     return render(request, 'recevoir.html', {'title':"Bon d'achat", 'suppliers':Supplier.objects.all(), 'today':timezone.now().date(), "target":target, 'bonno':bonno})
 
@@ -1164,16 +1161,16 @@ def addbonlivraison(request):
     print('isfarah, target', isfarah, target)
     if isfarah:
         latest_receipt = Bonlivraison.objects.filter(
-            bon_no__startswith=f'FR-BL{year}'
+            bon_no__startswith=f'LU-BL{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     bon_no__startswith=f'FR-BL{year}'
+        #     bon_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-            receipt_no = f"FR-BL{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-BL{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-BL{year}000000001"
+            receipt_no = f"LU-BL{year}000000001"
     else:
         latest_receipt = Bonlivraison.objects.filter(
             bon_no__startswith=f'BL{year}'
@@ -1345,23 +1342,23 @@ def addfacture(request):
     if target=='f':
         isfarah=True
         latest_receipt = Facture.objects.filter(
-            facture_no__startswith=f'FR-FC{year}'
+            facture_no__startswith=f'LU-FC{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     facture_no__startswith=f'FR-BL{year}'
+        #     facture_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.facture_no[-9:])
-            receipt_no = f"FR-FC{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-FC{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-FC{year}000000001"
+            receipt_no = f"LU-FC{year}000000001"
     else:
         isorgh=True
         latest_receipt = Facture.objects.filter(
             facture_no__startswith=f'FC{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     facture_no__startswith=f'FR-BL{year}'
+        #     facture_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.facture_no[-9:])
@@ -2237,16 +2234,16 @@ def listfactures(request):
         total=Facture.objects.filter(isvalid=False, date__year=timezone.now().year, isfarah=True).aggregate(Sum('total')).get('total__sum') or 0
         lastdatefacture=Facture.objects.filter(isvalid=False, date__year=timezone.now().year, isfarah=True).last().date if bons else timezone.now().date()
         latest_receipt = Facture.objects.filter(
-            facture_no__startswith=f'FR-FC{year}'
+            facture_no__startswith=f'LU-FC{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     facture_no__startswith=f'FR-BL{year}'
+        #     facture_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.facture_no[-9:])
-            receipt_no = f"FR-FC{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-FC{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-FC{year}000000001"
+            receipt_no = f"LU-FC{year}000000001"
     else:
         bons= Facture.objects.filter(isvalid=False, date__year=timezone.now().year, isfarah=False).order_by('-facture_no')[:50]
         total=Facture.objects.filter(isvalid=False, date__year=timezone.now().year, isfarah=False).aggregate(Sum('total')).get('total__sum') or 0
@@ -2255,7 +2252,7 @@ def listfactures(request):
             facture_no__startswith=f'FC{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     facture_no__startswith=f'FR-BL{year}'
+        #     facture_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.facture_no[-9:])
@@ -3675,13 +3672,13 @@ def addavoirclient(request):
     if target=="f":
         isfarah=True
 
-        prefix = f'FR-AV{year}'
+        prefix = f'LU-AV{year}'
         try:
             avoirclients = Avoirclient.objects.filter(no__startswith=prefix).last()
             latest_receipt_no = int(avoirclients.no.split('/')[1])
-            receipt_no = f"FR-AV{year}/{latest_receipt_no + 1}"
+            receipt_no = f"LU-AV{year}/{latest_receipt_no + 1}"
         except:
-            receipt_no = f"FR-AV{year}/1"
+            receipt_no = f"LU-AV{year}/1"
     elif target=='o':
         isorgh=True
         prefix = f'AV{year}'
@@ -3853,7 +3850,7 @@ def avoirsupplier(request):
     year = timezone.now().strftime("%y")
     isfarah=target=='f'
     if isfarah:
-        prefix = f'FR-FAV{year}'
+        prefix = f'LU-FAV{year}'
     else:
         prefix = f'FAV{year}'
     try:
@@ -3892,7 +3889,7 @@ def addavoirsupp(request):
     supplier=Supplier.objects.get(pk=supplierid)
     year = timezone.now().strftime("%y")
     if isfarah:
-        prefix = f'FR-FAV{year}'
+        prefix = f'LU-FAV{year}'
     else:
         prefix = f'FAV{year}'
     try:

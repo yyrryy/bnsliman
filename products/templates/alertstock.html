@@ -137,10 +137,10 @@
     }
 
     function getlowbycategory(categoryid, categoryname, classname){
-      if ($('[name="supplier"]').val()==0){
-          alertify.error('Veuillez choisir un fournisseur')
-          return
-      }
+      // if ($('[name="supplier"]').val()==0){
+      //     alertify.error('Veuillez choisir un fournisseur')
+      //     return
+      // }
       $(`.${classname}`).addClass('listactive').siblings().removeClass('listactive')
       $('.loadingscreen').addClass('d-block').removeClass('d-none')
       $('.categorynameholder').text(categoryname)

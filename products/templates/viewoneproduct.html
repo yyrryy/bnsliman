@@ -888,7 +888,7 @@
             return
         }
         alertify.prompt( 'Confirmer', 'Mot de pass', '****', function(evt, value) { 
-          if (value=='ORGHAD'){
+          if (value=='TESTPASS'){
             $.get('/products/replaceproduct', {'replacewith':productid, 'producttoreplace':'{{product.id}}', 'target':'{{target}}'}, (data)=>{
                 // close the current window
                 if (data.success){

@@ -384,16 +384,16 @@ def addbonsortie(request):
 #         #product.save()
 #     if len(farahitems)>0:
 #         latest_receipt = Bonlivraison.objects.filter(
-#             bon_no__startswith=f'FR-BL{year}'
+#             bon_no__startswith=f'LU-BL{year}'
 #         ).last()
 #         # latest_receipt = Bonsortie.objects.filter(
-#         #     bon_no__startswith=f'FR-BL{year}'
+#         #     bon_no__startswith=f'LU-BL{year}'
 #         # ).order_by("-bon_no").first()
 #         if latest_receipt:
 #             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-#             receipt_no = f"FR-BL{year}{latest_receipt_no + 1:09}"
+#             receipt_no = f"LU-BL{year}{latest_receipt_no + 1:09}"
 #         else:
-#             receipt_no = f"FR-BL{year}000000001"
+#             receipt_no = f"LU-BL{year}000000001"
 #         # create bon livraison in farah
 #         bon=Bonlivraison.objects.create(
 #             client_id=bon.client,
@@ -522,9 +522,7 @@ def validatebonsortie(request):
     
     # Create Bonlivraison for farah items
     if farahitems:
-        create_bonlivraison('FR-BL', totalfarah, farahitems, is_farah=True)
-    print('>> orghitems', orghitems)
-    print('>> farahitems', farahitems)
+        create_bonlivraison('LU-BL', totalfarah, farahitems, is_farah=True)
     # Create Bonlivraison for orgh items
     if orghitems:
         create_bonlivraison('BL', totalorgh, orghitems, is_farah=False)
@@ -627,7 +625,7 @@ def validatebonsortieproductprice(request):
     
     # Create Bonlivraison for farah items
     if farahitems:
-        create_bonlivraison('FR-BL', totalfarah, farahitems, is_farah=True)
+        create_bonlivraison('LU-BL', totalfarah, farahitems, is_farah=True)
     
     # Create Bonlivraison for orgh items
     if orghitems:
@@ -953,16 +951,16 @@ def createdevi(request):
         isfarah=True
         year = timezone.now().strftime("%y")
         latest_receipt = Devi.objects.filter(
-            bon_no__startswith=f'FR-DV{year}'
+            bon_no__startswith=f'LU-DV{year}'
         ).last()
         # latest_receipt = Devi.objects.filter(
-        #     bon_no__startswith=f'FR-DV{year}'
+        #     bon_no__startswith=f'LU-DV{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-            receipt_no = f"FR-DV{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-DV{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-DV{year}000000001"
+            receipt_no = f"LU-DV{year}000000001"
     else:
         isorgh=True
         year = timezone.now().strftime("%y")
@@ -1034,16 +1032,16 @@ def createboncommand(request):
         isfarah=True
         year = timezone.now().strftime("%y")
         latest_receipt = Command.objects.filter(
-            bon_no__startswith=f'FR-BC{year}'
+            bon_no__startswith=f'LU-BC{year}'
         ).last()
         # latest_receipt = Devi.objects.filter(
-        #     bon_no__startswith=f'FR-BC{year}'
+        #     bon_no__startswith=f'LU-BC{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-            receipt_no = f"FR-BC{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-BC{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-BC{year}000000001"
+            receipt_no = f"LU-BC{year}000000001"
     else:
         isorgh=True
         year = timezone.now().strftime("%y")
@@ -1163,16 +1161,16 @@ def boncommandobl(request):
     # if target=='f':
     #     year = timezone.now().strftime("%y")
     #     latest_receipt = Bonlivraison.objects.filter(
-    #         bon_no__startswith=f'FR-BL{year}'
+    #         bon_no__startswith=f'LU-BL{year}'
     #     ).last()
     #     # latest_receipt = Bonsortie.objects.filter(
-    #     #     bon_no__startswith=f'FR-BL{year}'
+    #     #     bon_no__startswith=f'LU-BL{year}'
     #     # ).order_by("-bon_no").first()
     #     if latest_receipt:
     #         latest_receipt_no = int(latest_receipt.bon_no[-9:])
-    #         receipt_no = f"FR-BL{year}{latest_receipt_no + 1:09}"
+    #         receipt_no = f"LU-BL{year}{latest_receipt_no + 1:09}"
     #     else:
-    #         receipt_no = f"FR-BL{year}000000001"
+    #         receipt_no = f"LU-BL{year}000000001"
     #     bon=Bonlivraison.objects.create(
     #         client_id=devi.client_id,
     #         total=devi.total,
@@ -1260,16 +1258,16 @@ def devitobl(request):
     # if target=='f':
     #     year = timezone.now().strftime("%y")
     #     latest_receipt = Bonlivraison.objects.filter(
-    #         bon_no__startswith=f'FR-BL{year}'
+    #         bon_no__startswith=f'LU-BL{year}'
     #     ).last()
     #     # latest_receipt = Bonsortie.objects.filter(
-    #     #     bon_no__startswith=f'FR-BL{year}'
+    #     #     bon_no__startswith=f'LU-BL{year}'
     #     # ).order_by("-bon_no").first()
     #     if latest_receipt:
     #         latest_receipt_no = int(latest_receipt.bon_no[-9:])
-    #         receipt_no = f"FR-BL{year}{latest_receipt_no + 1:09}"
+    #         receipt_no = f"LU-BL{year}{latest_receipt_no + 1:09}"
     #     else:
-    #         receipt_no = f"FR-BL{year}000000001"
+    #         receipt_no = f"LU-BL{year}000000001"
     #     bon=Bonlivraison.objects.create(
     #         client_id=devi.client_id,
     #         total=devi.total,
@@ -1399,16 +1397,16 @@ def suppliercreatedevi(request):
         isfarah=True
         year = timezone.now().strftime("%y")
         latest_receipt = Devisupplier.objects.filter(
-            bon_no__startswith=f'FR-FDV{year}'
+            bon_no__startswith=f'LU-FDV{year}'
         ).last()
         # latest_receipt = Devi.objects.filter(
-        #     bon_no__startswith=f'FR-DV{year}'
+        #     bon_no__startswith=f'LU-DV{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-            receipt_no = f"FR-FDV{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-FDV{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-FDV{year}000000001"
+            receipt_no = f"LU-FDV{year}000000001"
     else:
         isorgh=True
         year = timezone.now().strftime("%y")
@@ -1480,16 +1478,16 @@ def suppliercreateboncommand(request):
         isfarah=True
         year = timezone.now().strftime("%y")
         latest_receipt = Commandsupplier.objects.filter(
-            bon_no__startswith=f'FR-FBC{year}'
+            bon_no__startswith=f'LU-FBC{year}'
         ).last()
         # latest_receipt = Devi.objects.filter(
-        #     bon_no__startswith=f'FR-BC{year}'
+        #     bon_no__startswith=f'LU-BC{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-            receipt_no = f"FR-FBC{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-FBC{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-FBC{year}000000001"
+            receipt_no = f"LU-FBC{year}000000001"
     else:
         isorgh=True
         year = timezone.now().strftime("%y")
@@ -1609,16 +1607,16 @@ def supplierboncommandobl(request):
     # if target=='f':
     #     year = timezone.now().strftime("%y")
     #     latest_receipt = Bonlivraison.objects.filter(
-    #         bon_no__startswith=f'FR-BL{year}'
+    #         bon_no__startswith=f'LU-BL{year}'
     #     ).last()
     #     # latest_receipt = Bonsortie.objects.filter(
-    #     #     bon_no__startswith=f'FR-BL{year}'
+    #     #     bon_no__startswith=f'LU-BL{year}'
     #     # ).order_by("-bon_no").first()
     #     if latest_receipt:
     #         latest_receipt_no = int(latest_receipt.bon_no[-9:])
-    #         receipt_no = f"FR-BL{year}{latest_receipt_no + 1:09}"
+    #         receipt_no = f"LU-BL{year}{latest_receipt_no + 1:09}"
     #     else:
-    #         receipt_no = f"FR-BL{year}000000001"
+    #         receipt_no = f"LU-BL{year}000000001"
     #     bon=Bonlivraison.objects.create(
     #         client_id=devi.client_id,
     #         total=devi.total,
@@ -1705,16 +1703,16 @@ def supplierdevitobl(request):
     # if target=='f':
     #     year = timezone.now().strftime("%y")
     #     latest_receipt = Bonlivraison.objects.filter(
-    #         bon_no__startswith=f'FR-BL{year}'
+    #         bon_no__startswith=f'LU-BL{year}'
     #     ).last()
     #     # latest_receipt = Bonsortie.objects.filter(
-    #     #     bon_no__startswith=f'FR-BL{year}'
+    #     #     bon_no__startswith=f'LU-BL{year}'
     #     # ).order_by("-bon_no").first()
     #     if latest_receipt:
     #         latest_receipt_no = int(latest_receipt.bon_no[-9:])
-    #         receipt_no = f"FR-BL{year}{latest_receipt_no + 1:09}"
+    #         receipt_no = f"LU-BL{year}{latest_receipt_no + 1:09}"
     #     else:
-    #         receipt_no = f"FR-BL{year}000000001"
+    #         receipt_no = f"LU-BL{year}000000001"
     #     bon=Bonlivraison.objects.create(
     #         client_id=devi.client_id,
     #         total=devi.total,
@@ -1867,22 +1865,22 @@ def facturemultiple(request):
     if target=='f':
         isfarah=True
         latest_receipt = Facture.objects.filter(
-            facture_no__startswith=f'FR-FC{year}'
+            facture_no__startswith=f'LU-FC{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     facture_no__startswith=f'FR-BL{year}'
+        #     facture_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.facture_no[-9:])
-            receipt_no = f"FR-FC{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"LU-FC{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"FR-FC{year}000000001"
+            receipt_no = f"LU-FC{year}000000001"
     else:
         latest_receipt = Facture.objects.filter(
             facture_no__startswith=f'FC{year}'
         ).last()
         # latest_receipt = Bonsortie.objects.filter(
-        #     facture_no__startswith=f'FR-BL{year}'
+        #     facture_no__startswith=f'LU-BL{year}'
         # ).order_by("-bon_no").first()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.facture_no[-9:])
@@ -2003,22 +2001,22 @@ def factureachatmultiple(request):
     # if target=='f':
     #     isfarah=True
     #     latest_receipt = Factureachat.objects.filter(
-    #         facture_no__startswith=f'FR-AFC{year}'
+    #         facture_no__startswith=f'LU-AFC{year}'
     #     ).last()
     #     # latest_receipt = Bonsortie.objects.filter(
-    #     #     facture_no__startswith=f'FR-BL{year}'
+    #     #     facture_no__startswith=f'LU-BL{year}'
     #     # ).order_by("-bon_no").first()
     #     if latest_receipt:
     #         latest_receipt_no = int(latest_receipt.facture_no[-9:])
-    #         receipt_no = f"FR-AFC{year}{latest_receipt_no + 1:09}"
+    #         receipt_no = f"LU-AFC{year}{latest_receipt_no + 1:09}"
     #     else:
-    #         receipt_no = f"FR-AFC{year}000000001"
+    #         receipt_no = f"LU-AFC{year}000000001"
     # else:
     #     latest_receipt = Factureachat.objects.filter(
     #         facture_no__startswith=f'AFC{year}'
     #     ).last()
     #     # latest_receipt = Bonsortie.objects.filter(
-    #     #     facture_no__startswith=f'FR-BL{year}'
+    #     #     facture_no__startswith=f'LU-BL{year}'
     #     # ).order_by("-bon_no").first()
     #     if latest_receipt:
     #         latest_receipt_no = int(latest_receipt.facture_no[-9:])
@@ -3001,7 +2999,7 @@ def validerbulk(request):
                     orghitems.append(Livraisonitem(**livraison_data))
         
     if len(farahitems)>0:
-        prefix='FR-BL'
+        prefix='LU-BL'
         latest_receipt = Bonlivraison.objects.filter(
             bon_no__startswith=f'{prefix}{year}'
         ).last()

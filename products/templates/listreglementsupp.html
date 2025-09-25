@@ -526,7 +526,7 @@
     //         return
     //     }
     //     alertify.prompt( 'Confirmer', 'Mot de pass', 'Prompt Value', function(evt, value) { 
-    //         if (value=='ORGHAD'){
+    //         if (value=='TESTPASS'){
     //             $.get('/products/payreglementsupp', {
     //                 'reglid':reglid,
     //                 'banktarget':banktarget,
@@ -542,7 +542,7 @@
     function refusedreglsupp(reglid){
         alertify.prompt( 'Confirmer', 'Mot de pass', 'Prompt Value', function(evt, value) { 
             console.log('>> value', value)
-            if (value=='ORGHAD'){
+            if (value=='TESTPASS'){
                 console.log('>> sending efused')
                 $.get('/products/refusedreglsupp', {'reglid':reglid}, (data)=>{
                     ajaxpage('add', '+ Article', '/products/listreglementsupp?target={{target}}')

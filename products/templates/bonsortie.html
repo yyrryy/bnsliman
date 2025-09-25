@@ -816,7 +816,7 @@
           let addprice=$(this).parent().parent().find('input[name="addprice"]')
           let addremise=$(this).parent().parent().find('input[name="addremise"]')
           let addqty=$(this).parent().parent().find('input[name="addqty"]')
-          if (term.startsWith('fr-')){
+          if (term.startsWith('lu-')){
             addqty.attr('max', stocktotalfarah)
             // add a sign to addrowbtn to use it when adding row #sfefr435
             // 1 means thsi product is a farah product
@@ -858,7 +858,7 @@
                   'id': id,
                   'clientid': $('.clientselectbl').val(),
                   'csrfmiddlewaretoken': '{{csrf_token}}',
-                  // term to use it in case it has fr- to get buyprice
+                  // term to use it in case it has lu- to get buyprice
                   'term':term
               },
               success: function(data){

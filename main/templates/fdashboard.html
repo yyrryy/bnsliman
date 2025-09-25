@@ -9,13 +9,13 @@
         </a>
   
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item text-success" href="/products/ste1" >FR</a>
-          <a class="dropdown-item" href="/products/ste2" >ORGH</a>
+          <a class="dropdown-item text-success" href="/products/ste1" >Union</a>
+          <a class="dropdown-item" href="/products/ste2" >Comptoir</a>
           <a class="dropdown-item" href="/products/pointdevente" >Point de vente</a>
         </div>
       </div>
       <div class="btn p-2 text-white text-center sectionbtn active position-relative" onclick="getsection(event, 'Farah', '/products/farahhome')">
-        FR
+        Union
       </div>
       
     </div>
@@ -185,7 +185,7 @@
       </a>
       
     </div>
-    <div class="dropdown show">
+    <!-- <div class="dropdown show">
       <a class="btn border dropdown-toggle bg-white" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       </a>
 
@@ -194,10 +194,10 @@
         <a class="dropdown-item" href="#" onclick="addscreen('/products/bondevi?target=f')">Bon Livraison</a>
         <a class="dropdown-item" href="#">Devi</a>
       </div>
-    </div>
+    </div> -->
     <!-- search -->
     <div>
-      
+      <button class="btn bi bi-bell text-white bg-danger" onclick="ajaxpage('alert', 'Alert stock', '/products/alertstock?target={{target}}')"></button>
       <input style="
       width: 19em;
       

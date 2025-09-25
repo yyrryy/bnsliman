@@ -192,7 +192,7 @@
   function refusedreglbl(reglid){
         alertify.prompt( 'Confirmer', 'Mot de pass', 'Prompt Value', function(evt, value) { 
             console.log('>> value', value)
-            if (value=='ORGHAD'){
+            if (value=='TESTPASS'){
                 console.log('>> sending efused')
                 $.get('/products/refusedreglbl', {'reglid':reglid}, (data)=>{
                     ajaxpage('add', '+ Article', '/products/listreglementbl?target={{target}}')
