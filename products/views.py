@@ -1130,6 +1130,12 @@ def addsupply(request):
 
 @login_required(login_url='main:home')
 def addbonlivraison(request):
+    bons=Bonlivraison.objects.all()
+    if len(bons)>100:
+        return JsonResponse({
+            'success':False,
+            'error':'Vous avez depassé le nombre maximal de bons'
+        })
     # mantant=request.POST.get('mantant')
     # mode=request.POST.get('mode')
     # npiece=request.POST.get('npiece')
@@ -6279,22 +6285,24 @@ def excelsupp(request):
 def excelpdcts(request):
     #target=request.GET.get('targt')
     myfile = request.FILES['excelFile']
+    target=request.POST.get('target')
     df = pd.read_excel(myfile)
     entries=0
     for d in df.itertuples():
         try:
-            ref = d.ref.lower().strip()
+            ref = d.name.split()[-1].lower().strip()
         except:
-            ref=d.ref
+            ref=d.name.split()[-1]
+        print('>>ref', ref)
         #reps=json.dumps(d.rep)
         farahref=f'fr-{ref}'
         name = d.name
-        refeq = '' if pd.isna(d.refeq) else d.refeq
+        #refeq = '' if pd.isna(d.refeq) else d.refeq
         #status = False if pd.isna(d.status) else True
-        #coderef = '' if pd.isna(d.code) else d.code
+        coderef = '' if pd.isna(d.coderef) else d.coderef
         #diam = '' if pd.isna(d.diam) else d.diam
-        #qty = 0 if pd.isna(d.qty) else d.qty
-        #buyprice = 0 if pd.isna(d.buyprice) else d.buyprice
+        qty = 0 if pd.isna(d.qty) else d.qty
+        buyprice = 0 if pd.isna(d.buyprice) else d.buyprice
         #devise = 0 if pd.isna(d.devise) else d.devise
         
         #prixbrut = 0 if pd.isna(d.prixbrut) else d.prixbrut
@@ -6302,12 +6310,12 @@ def excelpdcts(request):
         #order = '' if pd.isna(d.order) else d.order
         #img = None if pd.isna(d.img) else d.img
         #prixnet=0 if pd.isna(d.prixnet) else d.prixnet
-        print('>> adding ', ref)
-        product=Notavailable.objects.create(
-            ref=ref,
-            name=name,
-            equiv=refeq,
-        )
+        # print('>> adding ', ref)
+        # product=Notavailable.objects.create(
+        #     ref=ref,
+        #     name=name,
+        #     equiv=refeq,
+        # )
         # try:
         #     ref = d.ref.lower().strip()
         # except:
@@ -6332,17 +6340,26 @@ def excelpdcts(request):
         # #order = '' if pd.isna(d.order) else d.order
         # #img = None if pd.isna(d.img) else d.img
         # #prixnet=0 if pd.isna(d.prixnet) else d.prixnet
-        # product=Produit.objects.create(
-        #     ref=ref,
-        #     name=name,
-        #     category_id=category,
-        #     unite=unite,
-        #     mark_id=mark,
-        #     qtyjeu=qtyjeu,
-        #     minstock=1,
-        #     equivalent=refeq,
-        #     farahref=farahref
-        # )
+        product=Produit.objects.create(
+            ref=ref,
+            name=name,
+            #category_id=category,
+            #unite=unite,
+            #mark_id=mark,
+            #qtyjeu=qtyjeu,
+            minstock=0,
+            #equivalent=refeq,
+            farahref=farahref
+        )
+        if target=='f':
+            product.stocktotalfarah=qty
+            product.frstockinitial=qty
+            product.frpriceinitial=buyprice
+        else:
+            product.stocktotalorgh=qty
+            product.stockinitial=qty
+            product.priceinitial=buyprice
+        product.save()
 
     print('>>>', entries)
     return JsonResponse({
