@@ -6295,7 +6295,7 @@ def excelpdcts(request):
             ref=d.name.split()[-1]
         print('>>ref', ref)
         #reps=json.dumps(d.rep)
-        farahref=f'fr-{ref}'
+        farahref=f'lu-{ref}'
         name = d.name
         #refeq = '' if pd.isna(d.refeq) else d.refeq
         #status = False if pd.isna(d.status) else True
@@ -6340,26 +6340,40 @@ def excelpdcts(request):
         # #order = '' if pd.isna(d.order) else d.order
         # #img = None if pd.isna(d.img) else d.img
         # #prixnet=0 if pd.isna(d.prixnet) else d.prixnet
-        product=Produit.objects.create(
-            ref=ref,
-            name=name,
-            #category_id=category,
-            #unite=unite,
-            #mark_id=mark,
-            #qtyjeu=qtyjeu,
-            minstock=0,
-            #equivalent=refeq,
-            farahref=farahref
-        )
-        if target=='f':
-            product.stocktotalfarah=qty
-            product.frstockinitial=qty
-            product.frpriceinitial=buyprice
-        else:
-            product.stocktotalorgh=qty
-            product.stockinitial=qty
-            product.priceinitial=buyprice
-        product.save()
+        try:
+            product=Produit.objects.get(ref=ref)
+            print('>> product exist', ref)
+            if target=='f':
+                product.stocktotalfarah=qty
+                product.frstockinitial=qty
+                product.frpriceinitial=buyprice
+            else:
+                product.stocktotalorgh=qty
+                product.stockinitial=qty
+                product.priceinitial=buyprice
+            product.save()
+        except Exception as e:
+            print('>>>', e, ref)
+            product=Produit.objects.create(
+                ref=ref,
+                name=name,
+                #category_id=category,
+                #unite=unite,
+                #mark_id=mark,
+                #qtyjeu=qtyjeu,
+                minstock=0,
+                #equivalent=refeq,
+                farahref=farahref
+            )
+            if target=='f':
+                product.stocktotalfarah=qty
+                product.frstockinitial=qty
+                product.frpriceinitial=buyprice
+            else:
+                product.stocktotalorgh=qty
+                product.stockinitial=qty
+                product.priceinitial=buyprice
+            product.save()
 
     print('>>>', entries)
     return JsonResponse({
