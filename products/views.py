@@ -5474,22 +5474,22 @@ def searchclient(request):
     term=request.GET.get('term')
     target=request.GET.get('target')
     #regex_search_term = term.replace('+', '*')
-
     # Split the term into individual words separated by '*'
     search_terms = term.split('+')
-
     # Create a list of Q objects for each search term and combine them with &
     q_objects = Q()
     for term in search_terms:
         q_objects &= (Q(name__icontains=term) |
-                Q(code__icontains=term) |
-                Q(region__icontains=term) |
-                Q(city__icontains=term) |
-                Q(address__icontains=term))
-    filter_params = {'clientsortie': True} if target == 's' else {'clientfarah': True} if target == 'f' else {'clientorgh': True}
-    print('target >>', target)
+            Q(code__icontains=term) |
+            Q(region__icontains=term) |
+            Q(city__icontains=term) |
+            Q(address__icontains=term)
+        )
+    # filter_params = {'clientsortie': True} if target == 's' else {'clientfarah': True} if target == 'f' else {'clientorgh': True}
+    #print('target >>', target)
     # Perform the query with the combined Q object and conditional filter parameters
-    clients = Client.objects.filter(q_objects, **filter_params)
+    clients = Client.objects.filter(q_objects)
+    # clients = Client.objects.filter(q_objects, **filter_params)
 
     # if '+' in term:
     #     term=term.split('+')

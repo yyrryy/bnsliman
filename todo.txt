@@ -1,0 +1,3 @@
+client same in all
+fournisseur should be separated
+coedbar

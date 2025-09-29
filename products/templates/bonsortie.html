@@ -847,7 +847,7 @@
               $('.producthistory').html(data)
           })
           // $('.addstock').text('Stock farah: '+stocktotalfarah)
-          $('.addstockfacture').text('Stock orgh: '+stocktotalorgh)
+          $('.addstockfacture').text('Stock Comp: '+stocktotalorgh)
           // we are getting ere list of reps that have price
           
           $.ajax({
@@ -864,7 +864,7 @@
               success: function(data){
                 console.log(data)
                 parentdiv.find('.addclientprice').html((`${data.price} (${data.remise}%)`))
-                $('.addbyuprice').html(`pr. achat orgh: ${data.orbuyprice}(${data.orremise}%)`)
+                $('.addbyuprice').html(`pr. achat Compt: ${data.orbuyprice}(${data.orremise}%)`)
                 // $('.addbyuprice').html(`pr. achat farah: ${data.frbuyprice}(${data.frremise}%) <br> pr. achat orgh: ${data.orbuyprice}(${data.orremise}%)`)
               }
             })
