@@ -224,6 +224,120 @@
   <script>
     
     $('.select2').select2()
+    function processBarcode(barcode) {
+            // let bonitems = JSON.parse(localStorage.getItem('bonitemscomptoir')) || [];
+            // let pdcts = JSON.parse(localStorage.getItem('pdctsinbonsortiecomptoir')) || [];
+
+            console.log('>> br', barcode);
+            $.get('/products/scanproductdata', { 'barcode': barcode }, (data) => {
+                console.log('>> data', data)
+                if (data.results && data.results.length > 0) {
+                  let product = data.results[0]; // assume one result
+
+                  // Create a new Select2 option
+                  let option = new Option(product.text, product.id, true, true);
+
+                  // Add it to the select element
+                  $('#productsselect2').append(option).trigger('change');
+
+                  // Optional: highlight or show success message
+                  console.log('✅ Product added:', product.text);
+                } else {
+                  console.log('Produit introuvable pour le code-barres : ' + barcode);
+                }
+                // if (data.success){
+                //     let row = {
+                //         'article': data.ref + ' - ' + data.car,
+                //         'price': data.price,
+                //         'image': data.image,
+                //         'mark': data.mark,
+                //         'stock': data.stock,
+                //         'total': data.price,
+                //         'qty': 1,
+                //         'productid': data.id,
+                //         'prices': [data.price]
+                //     };
+                //     pdcts.push(data.id);
+                //     localStorage.setItem('pdctsinbonsortiecomptoir', JSON.stringify(pdcts));
+    
+                //     // Add the item to local storage
+                //     console.log(bonitems);
+                //     bonitems.push(row);
+                //     localStorage.setItem('bonitemscomptoir', JSON.stringify(bonitems));
+                //     console.log(row)
+    
+                //     // Add item to the DOM
+                //     $('.itemsbon').prepend(`
+                //         <tr class="item-row" id="itemrow${data.id}">
+                //             <td class="item-image">
+                //                 <img style="width:60%;" src="${data.image}">
+                //             </td>
+                //             <td id="item-name" class="item-name">
+                //                 <strong class="invoice-mark">${data.mark}</strong>
+                //             </td>
+                //             <td id="item-name" class="item-name">
+                //                 <strong class="invoice-item" id="invoice-item">${data.ref} - ${data.car}</strong>
+                //             </td>
+                //             <td>
+                //                 ${data.stock}
+                //             </td>
+                //             <td>
+                //                 <input readonly class="form-control qty" placeholder="Quantity" type="number" min=1 value="1" oninput="saverow(event)">
+                //             </td>
+                //             <td class="total">${data.price}</td>
+                //             <input readonly type="hidden" class="productid" value=${data.id}>
+                //             <td>
+                //                 <i class="btn btn-danger delete" title="Supprimer" productid="${data.id}" onclick="removeline(event, '${data.id}', '${data.out_id}')">Retour</i>
+                //             </td>
+                //         </tr>
+                //     `);
+                
+                // }else{
+                //     alertify.error(data.message)
+                // }
+            });
+        }
+        const charToNumberMap = {
+            '&': '1',
+            'é': '2',
+            '"': '3',
+            "'": '4',
+            '(': '5',
+            '-': '6',
+            'è': '7',
+            '_': '8',
+            'ç': '9',
+            'à': '0'
+        };
+
+        let barcode = '';
+        let typingTimer;
+
+        // Convert character to corresponding number if mapped
+        function convertCharToNumber(char) {
+            return charToNumberMap[char] || char;
+        }
+        $(document).on('keydown', function(event) {
+            if (typingTimer) clearTimeout(typingTimer);
+
+            if (event.which === 13) {  // Enter key detected
+                if (barcode) {
+                  console.log('>> brcode');
+                    processBarcode(barcode);
+                    barcode = ''; // Reset the barcode after processing
+                }
+            } else {
+                // Accumulate characters, converting to numbers if mapped
+                const key = event.key;
+                barcode += convertCharToNumber(key);
+
+                // Reset barcode if no keys are pressed within a certain time
+                typingTimer = setTimeout(() => {
+                    barcode = '';
+                }, 100);  // Adjust timeout as needed to filter unintended keystrokes
+            }
+        });
+            
     function paymentbon(){
       let total = parseFloat($('.totalbonsortie').text())
       let payment = parseFloat($('.payment').val())
@@ -506,7 +620,7 @@
         // ${stock<=0? "text-danger":"" }"
         let tr = `
         <tr class="itemrow" productid=${id} farah=${farah}>
-            <td style="padding: 2px 0; font-size: 13px;" class="ref" onclick="removelinebl(event, ${id})">${farah=='1'?'(FR)':'(OR)'} ${ref}</td>
+            <td style="padding: 2px 0; font-size: 13px;" class="ref" onclick="removelinebl(event, ${id})">${farah=='1'?'(UN)':'(CP)'} ${ref}</td>
             <td style="padding: 2px 0; font-size: 13px;" class="name text-start">${name}</td>
             <td style="paddingpx 0; font-size: 13px;" class="dp">${dp}</td>
             <td style="padding: 2px 0; font-size: 13px;" class="clientprice">${priceclient}</td>
@@ -529,7 +643,7 @@
           'remise': addremise.val(),
           'total': addtotal,
           'name': name,
-          'ref': `${farah=='1'?'(FR)':'(OR)'} ${ref}`,
+          'ref': `${farah=='1'?'(UN)':'(CP)'} ${ref}`,
           'dp': dp,
           'stock': stockfarah,
           'clientprice': priceclient,

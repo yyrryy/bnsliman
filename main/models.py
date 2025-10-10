@@ -87,6 +87,7 @@ class Produit(models.Model):
     unite=models.CharField(max_length=500, null=True, default=None)
     # code = classement
     code=models.CharField(max_length=500, null=True)
+    #can be as codebar
     coderef=models.CharField(max_length=500, null=True, default=None)
     #price
     buyprice= models.FloatField(default=0.0, null=True, blank=True)

@@ -5302,7 +5302,7 @@ def searchproductbonsortie(request):
     print('term>>', term)
     results=[]
     for i in products:
-        ref=i.farahref if term.startswith('fr-') else i.ref
+        ref=i.farahref if term.startswith('lu-') else i.ref
         results.append({
             'id':f'{i.ref}§{i.name}§{i.buyprice}§{i.stocktotalfarah}§{i.stockfacturefarah}§{i.stocktotalorgh}§{i.stockfactureorgh}§{i.id}§{i.sellprice}§{i.remisesell}§{i.prixnet}§{i.representprice}§{term}',
             'text':f'{ref.upper()} - {i.name.upper()}',
@@ -11893,3 +11893,26 @@ def setinventair(request):
     return JsonResponse({
         'success':True
     })
+
+def scanproductdata(request):
+    barcode=request.GET.get('barcode').lower().replace('shift', '')
+    print('>> barcode', barcode)
+    products=Produit.objects.filter(coderef=barcode)
+    term='lu-' if 'lu' in barcode else 'tt'
+    if not products:
+        products=Produit.objects.filter(ref=barcode.replace('lu-', ''))
+    print('>> product', products)
+    results=[]
+    for i in products:
+        ref=i.farahref if 'lu' in barcode else i.ref
+        results.append({
+            'id':f'{i.ref}§{i.name}§{i.buyprice}§{i.stocktotalfarah}§{i.stockfacturefarah}§{i.stocktotalorgh}§{i.stockfactureorgh}§{i.id}§{i.sellprice}§{i.remisesell}§{i.prixnet}§{i.representprice}§{term}',
+            'text':f'{ref.upper()} - {i.name.upper()}',
+            'stock':i.stocktotalfarah+i.stocktotalorgh,
+            'stockfacture':i.stockfacturefarah,
+            'image':i.image.url if i.image else "",
+            'mark':i.mark.name if i.mark else "",
+            # return term to use it as adistinguisher
+            'term':term
+        })
+    return JsonResponse({'results': results})
