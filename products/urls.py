@@ -437,7 +437,6 @@ urlpatterns = [
     path('updatefactureachatnumber', checkviews.updatefactureachatnumber, name='updatefactureachatnumber'),
     path('updatefactureachatdate', checkviews.updatefactureachatdate, name='updatefactureachatdate'),
     path('inventaire', checkviews.inventaire, name='inventaire'),
-    path('scanproductdata', checkviews.scanproductdata, name='scanproductdata'),
     # path('checkfactureno', checkviews.checkfactureno, name='checkfactureno'),
     # path('checkfactureno', checkviews.checkfactureno, name='checkfactureno'),
     # path('checkfactureno', checkviews.checkfactureno, name='checkfactureno'),
