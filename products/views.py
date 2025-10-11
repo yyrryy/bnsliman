@@ -933,75 +933,14 @@ def addsupply(request):
             nbon=bon
         )
         if target=='f':
-            # if product.isnegativeinfr:
-            #     print('>> product is negative')
-            #     qtynegative=json.loads(product.frnegative)
-            #     sortitems=json.loads(product.frsorties)
-            #     print('>> ', qtynegative, sortitems)
-            #     thisqty=int(i['qty'])
-            #     #for , ss in zip(qtynegative, sortitems):
-            #     for index, (qq, ss) in enumerate(zip(qtynegative, sortitems)):
-            #         print('>> thisqty, qq', thisqty, qq)
-            #         if not int(qq)==0:
-            #             if not thisqty<=0:
-            #                 # find sortie and add qty and price
-            #                 sorti=Sortieitem.objects.get(pk=ss)
-            #                 prices=json.loads(sorti.pricesofout)
-            #                 qtyofout=json.loads(sorti.qtyofout)
-            #                 if thisqty>=qq:
-            #                     print(">>thisqty>=qq", thisqty>=qq, qq)
-            #                     qtyofout.append(qq)
-            #                     prices.append(st.id)
-            #                     diff=int(thisqty)-int(qq)
-            #                     thisqty=diff
-            #                     st.qtyofprice=diff
-            #                     st.save()
-            #                     qtyofout[index]=0
-            #                     product.save()
-            #                     # qtynegative.remove(qq)
-            #                     # sortitems.remove(ss)
-            #                 else:
-            #                     diff=int(qq)-int(thisqty)
-            #                     qtyofout.append(diff)
-            #                     prices.append(st.id)
-            #                     st.qtyofprice=0
-            #                     st.save()
-            #                     qtyofout[index]=diff
-            #                 sorti.pricesofout=prices
-            #                 sorti.qtyofout=qtyofout
-            #                 sorti.save()
-            #                     # finish
-            #         if sum(qtynegative)==0:
-            #             print('>> sum', sum(qtynegative), qtynegative)
-            #             product.isnegativeinfr=False
-            #         product.save()            
-
-                    
-            # calcul pondiré, stock needs to be more than 0
-            # if product.stocktotalfarah>0:
-            #     print('>> has stock')
-            #     totalqtys=int(product.stocktotalfarah)+int(i['qty'])
-            #     actualtotal=product.stocktotalfarah*product.frnetbuyprice
-            #     print('totalqty, actualtotal', totalqtys, actualtotal)
-            #     # remainingstock=Stockin.objects.filter(qtyofprice__gt=0, product=product, isfarah=True, isavoir=False)
-            #     # for b in remainingstock:
-            #     #     actualtotal+=float(b.price)*float(b.qtyofprice)
-            #     thistotal=int(i['qty'])*netprice
-            #     print('>>>>>> thistotal', thistotal)
-            #     totalprices=round(float(i['total'])+actualtotal, 2)
-            #     pondire=round(totalprices/totalqtys, 2)
-            #     product.frcoutmoyen=pondire
-            #     product.save()
-            #     print('>> coout m', pondire)
-            # else:
-            #print('>> cooutm', netprice)
-            #product.frcoutmoyen=netprice
             product.frremise1=remise1
             product.frremise2=remise2
             product.frremise3=remise3
             product.frremise4=remise4
             product.frbuyprice=buyprice
             product.froriginsupp_id=supplierid
+            product.frsuppliercommand=None
+            product.friscommanded=False
             product.frnetbuyprice=netprice
             print('>> addin qty')
             product.stocktotalfarah=float(product.stocktotalfarah)+float(i['qty'])
@@ -1010,60 +949,7 @@ def addsupply(request):
             # if isfacture:
             #     product.stockfacturefarah=int(product.stockfacturefarah)+int(i['qty'])
         else:
-            # if product.isnegative:
-            #     qtynegative=json.loads(product.negative)
-            #     sortitems=json.loads(product.sorties)
-            #     thisqty=int(i['qty'])
-                
-            #     #for , ss in zip(qtynegative, sortitems):
-            #     for index, (qq, ss) in enumerate(zip(qtynegative, sortitems)):
-            #         if not int(qq)==0:
-            #             if not thisqty<=0:
-            #                 # find sortie and add qty and price
-            #                 sorti=Sortieitem.objects.get(pk=ss)
-            #                 prices=json.loads(sorti.pricesofout)
-            #                 qtyofout=json.loads(sorti.qtyofout)
-            #                 if thisqty>=qq:
-            #                     qtyofout.append(qq)
-            #                     prices.append(st.id)
-            #                     diff=int(thisqty)-int(qq)
-            #                     thisqty=diff
-            #                     st.qtyofprice=diff
-            #                     st.save()
-            #                     qtyofout[index]=0
-            #                     product.save()
-            #                     # qtynegative.remove(qq)
-            #                     # sortitems.remove(ss)
-            #                 else:
-            #                     diff=int(qq)-int(thisqty)
-            #                     qtyofout.append(diff)
-            #                     prices.append(st.id)
-            #                     st.qtyofprice=0
-            #                     st.save()
-            #                     qtyofout[index]=diff
-            #                 sorti.pricesofout=prices
-            #                 sorti.qtyofout=qtyofout
-            #                 sorti.save()
-            #                     # finish
-            #         if sum(qtynegative)==0:
-            #             product.isnegative=False
-            #         product.save()
             
-            # if product.stocktotalorgh>0:
-            #     totalqtys=int(product.stocktotalorgh)+int(i['qty'])
-            #     actualtotal=product.stocktotalorgh*product.netbuyprice
-            #     # remainingstock=Stockin.objects.filter(qtyofprice__gt=0, product=product, isfarah=False)
-            #     # for i in remainingstock:
-            #     #     actualtotal+=float(i.price)*float(i.qtyofprice)
-            #     thistotal=int(i['qty'])*buyprice
-            #     totalprices=round(float(i['total'])+actualtotal, 2)
-            #     pondire=round(totalprices/totalqtys, 2)
-            #     product.coutmoyen=pondire
-            #     product.save()
-            #     print('>> coout m', pondire)
-            # else:
-            #     print('>> cooutm', netprice)
-            #product.coutmoyen=netprice
             product.remise1=remise1
             product.remise2=remise2
             product.remise3=remise3
@@ -1071,6 +957,8 @@ def addsupply(request):
             product.buyprice=buyprice
             product.netbuyprice=netprice
             product.originsupp_id=supplierid
+            product.suppliercommand=None
+            product.iscommanded=False
             product.stocktotalorgh=float(product.stocktotalorgh)+float(i['qty'])
             # product.sellprice=buyprice
             # product.remisesell=remise1
@@ -1084,8 +972,6 @@ def addsupply(request):
         # totalprices=Stockin.objects.filter(product=product).aggregate(Sum('total'))['total__sum'] or 0
         # totalqty=Stockin.objects.filter(product=product).aggregate(Sum('quantity'))['quantity__sum'] or 0
         #product.coutmoyen=round(totalprices/totalqty, 2)
-        product.qtycommande=0
-        product.save()
         ### this was reglement
         # totalamount=sum(x if x is not None else 0 for x in mantant)
         # if float(totalamount)==float(totalbon):
@@ -6303,46 +6189,10 @@ def excelpdcts(request):
         #diam = '' if pd.isna(d.diam) else d.diam
         qty = 0 if pd.isna(d.qty) else d.qty
         buyprice = 0 if pd.isna(d.buyprice) else d.buyprice
-        #devise = 0 if pd.isna(d.devise) else d.devise
-        
-        #prixbrut = 0 if pd.isna(d.prixbrut) else d.prixbrut
-        #ctg = None if pd.isna(d.ctg) else d.ctg
-        #order = '' if pd.isna(d.order) else d.order
-        #img = None if pd.isna(d.img) else d.img
-        #prixnet=0 if pd.isna(d.prixnet) else d.prixnet
-        # print('>> adding ', ref)
-        # product=Notavailable.objects.create(
-        #     ref=ref,
-        #     name=name,
-        #     equiv=refeq,
-        # )
-        # try:
-        #     ref = d.ref.lower().strip()
-        # except:
-        #     ref=d.ref
-        # #reps=json.dumps(d.rep)
-        # farahref=f'fr-{ref}'
-        # name = d.name
-        # mark = None if pd.isna(d.mark) else d.mark
-        # category = None if pd.isna(d.category) else d.category
-        # refeq = '' if pd.isna(d.refeq) else d.refeq
-        # #status = False if pd.isna(d.status) else True
-        # #coderef = '' if pd.isna(d.code) else d.code
-        # #diam = '' if pd.isna(d.diam) else d.diam
-        # #qty = 0 if pd.isna(d.qty) else d.qty
-        # qtyjeu = 0 if pd.isna(d.qtyjeu) else d.qtyjeu
-        # unite = 0 if pd.isna(d.unite) else d.unite
-        # #buyprice = 0 if pd.isna(d.buyprice) else d.buyprice
-        # #devise = 0 if pd.isna(d.devise) else d.devise
-        
-        # #prixbrut = 0 if pd.isna(d.prixbrut) else d.prixbrut
-        # #ctg = None if pd.isna(d.ctg) else d.ctg
-        # #order = '' if pd.isna(d.order) else d.order
-        # #img = None if pd.isna(d.img) else d.img
-        # #prixnet=0 if pd.isna(d.prixnet) else d.prixnet
         try:
             product=Produit.objects.get(ref=ref)
             print('>> product exist', ref)
+            product.coderef=coderef
             if target=='f':
                 product.stocktotalfarah=qty
                 product.frstockinitial=qty
@@ -6363,7 +6213,8 @@ def excelpdcts(request):
                 #qtyjeu=qtyjeu,
                 minstock=0,
                 #equivalent=refeq,
-                farahref=farahref
+                farahref=farahref,
+                coderef=coderef
             )
             if target=='f':
                 product.stocktotalfarah=qty

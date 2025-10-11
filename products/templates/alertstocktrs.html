@@ -26,6 +26,7 @@
             <!-- <th class="text-center"><i class=" fa fa-edit"></i> Purchased Items</th>
             <th class="text-center"><i class=" fa fa-edit"></i> Bar Code</th> -->
             <th class="text-center"></th>
+            <th class="text-center">Fourn.commd</th>
 
         </tr>
         </thead>
@@ -84,6 +85,9 @@
                             </div>
                             </td>
                             {% endif %}
+                            <td>
+                                {{item.suppliercommand.name}}
+                            </td>
                             <!-- delete item is commented for now cause of the factorizaation -->
                             <!-- <button class="btn btn-danger btn-xs deleteproduct" title="Supprimer" data-id="{{item.id}}"><i class="fa fa-trash-o"></i></button> -->
    

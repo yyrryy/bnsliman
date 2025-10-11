@@ -26,6 +26,8 @@
             <!-- <th class="text-center"><i class=" fa fa-edit"></i> Purchased Items</th>
             <th class="text-center"><i class=" fa fa-edit"></i> Bar Code</th> -->
             <th class="text-center"></th>
+            <th class="text-center">Fourn.commd</th>
+
 
         </tr>
         </thead>
@@ -70,7 +72,7 @@
                         
                             {% if item.friscommanded %}
                             <td>
-                            <i class="bi bi-check text-success bi-2x"></i> <button class="btn bi bi-times btn-danger bi-2x" id="{{item.id}}" categoryid="{{item.category.id}}" onclick="cancelcommandfarah(event, '{{item.id}}')"></button> {{item.suppliercommand.name}}
+                            <button class="btn bi bi-cancel btn-danger bi-2x" id="{{item.id}}" categoryid="{{item.category.id}}" onclick="cancelcommandfarah(event, '{{item.id}}')">Annuler</button>
                             </td>
                             
                             
@@ -84,6 +86,9 @@
                             </div>
                             </td>
                             {% endif %}
+                            <td>
+                                {{item.frsuppliercommand.name}}
+                            </td>
                             <!-- delete item is commented for now cause of the factorizaation -->
                             <!-- <button class="btn btn-danger btn-xs deleteproduct" title="Supprimer" data-id="{{item.id}}"><i class="fa fa-trash-o"></i></button> -->
    
