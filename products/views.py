@@ -6194,44 +6194,46 @@ def excelpdcts(request):
         #diam = '' if pd.isna(d.diam) else d.diam
         qty = 0 if pd.isna(d.qty) else d.qty
         buyprice = 0 if pd.isna(d.buyprice) else d.buyprice
-        try:
-            product=Produit.objects.get(ref=ref)
-            print('>> product exist', ref)
-            print('>> assign coderef', coderef)
-            product.coderef=coderef
-            if target=='f':
-                product.stocktotalfarah=qty
-                product.frstockinitial=qty
-                product.frpriceinitial=buyprice
-            else:
-                product.stocktotalorgh=qty
-                product.stockinitial=qty
-                product.priceinitial=buyprice
-            product.save()
-        except Exception as e:
-            print('>> ', ref, e)
-            print('>> creating with coderef', coderef)
-            product=Produit.objects.create(
-                ref=ref,
-                name=name,
-                #category_id=category,
-                #unite=unite,
-                #mark_id=mark,
-                #qtyjeu=qtyjeu,
-                minstock=0,
-                #equivalent=refeq,
-                farahref=farahref,
-                coderef=coderef
-            )
-            if target=='f':
-                product.stocktotalfarah=qty
-                product.frstockinitial=qty
-                product.frpriceinitial=buyprice
-            else:
-                product.stocktotalorgh=qty
-                product.stockinitial=qty
-                product.priceinitial=buyprice
-            product.save()
+        # try:
+        #     product=Produit.objects.get(ref=ref)
+        #     print('>> product exist', ref)
+        #     print('>> assign coderef', coderef)
+        #     product.coderef=coderef
+        #     if target=='f':
+        #         product.stocktotalfarah=qty
+        #         product.frstockinitial=qty
+        #         product.frpriceinitial=buyprice
+        #     else:
+        #         product.stocktotalorgh=qty
+        #         product.stockinitial=qty
+        #         product.priceinitial=buyprice
+        #     product.save()
+        # except Exception as e:
+        print('>> ', ref, e)
+        print('>> creating with coderef', coderef)
+        product=Produit.objects.create(
+            ref=ref,
+            name=name,
+            #category_id=category,
+            #unite=unite,
+            #mark_id=mark,
+            #qtyjeu=qtyjeu,
+            minstock=0,
+            #equivalent=refeq,
+            farahref=farahref,
+            coderef=coderef
+        )
+        if target=='f':
+            product.farahproduct=True
+            product.stocktotalfarah=qty
+            product.frstockinitial=qty
+            product.frpriceinitial=buyprice
+        else:
+            product.orghproduct=True
+            product.stocktotalorgh=qty
+            product.stockinitial=qty
+            product.priceinitial=buyprice
+        product.save()
 
     print('>>>', entries)
     return JsonResponse({
