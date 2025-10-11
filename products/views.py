@@ -5184,7 +5184,9 @@ def loadjournalventefc(request):
 def searchproductbonsortie(request):
     # get url pams
     term=request.GET.get('term').lower().strip()
-    products=Produit.objects.filter(Q(ref__startswith=term) |Q(farahref__startswith=term))
+    products=Produit.objects.filter(Q(ref__startswith=term) |Q
+    (coderef__startswith=term) |Q
+    (farahref__startswith=term))
     print('term>>', term)
     results=[]
     for i in products:
@@ -5217,7 +5219,9 @@ def searchproductforbonachat(request):
             Q(category__name__icontains=term) |
             Q(equivalent__icontains=term) |
             Q(diametre__icontains=term)|
+            Q(coderef__startswith=term) |
             Q(cars__icontains=term)
+
         )
     # check if term in product.ref or product.name
     products=Produit.objects.filter(q_objects)
@@ -5247,6 +5251,7 @@ def searchproduct(request):
     for term in search_terms:
         q_objects &= (
             Q(ref__icontains=term) |
+            Q(coderef__startswith=term) |
             Q(name__icontains=term) |
             Q(mark__name__icontains=term) |
             Q(category__name__icontains=term) |
@@ -7078,6 +7083,7 @@ def searchproductsforstock(request):
         q_objects = Q()
         q_objects &= (
             Q(ref__icontains=term) |
+            Q(coderef__startswith=term) |
             Q(name__icontains=term) |
             Q(mark__name__icontains=term) |
             Q(category__name__icontains=term) |

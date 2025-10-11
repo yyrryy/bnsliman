@@ -2442,10 +2442,9 @@ def printbarcode(request):
     barcodes = []
     for i in products:
         if isfarah:
-            ref='fr-'+i['ref'].strip()
+            ref='lu-'+i['ref'].strip()
         else:
             ref=i['ref'].strip()
-        print('>>> ref', ref)
         name=i['name']
         remise1=0 if i['remise1']=='' else float(i['remise1'])
         price=i['price']
@@ -2510,18 +2509,17 @@ def barcodezebra(request):
     date=request.GET.get('date')
     date=datetime.strptime(date, '%Y-%m-%d').strftime('%d/%m/%y')
     target=request.GET.get('target')
-    print('>> products', products)
     isfarah=target=='f'
     barcodes = []
     for i in products:
         if isfarah:
-            ref='fr-'+i['ref'].strip()
+            ref='lu'+i['ref'].strip()
         else:
             ref=i['ref'].strip()
-        print('>>> ref', ref)
+        product=Produit.objects.get(id=i['productid'])
         name=i['name']
-        remise1=0 if i['remise1']=='' else float(i['remise1'])
-        price=i['price']
+        remise1=0 if i['remise1']=='' else int(i['remise1'])
+        price=(i['price']).replace('.', '')
         # net=float(price)-(float(price)*int(remise1)/100)
         # price=round(net*2, 2)
         #price=str(price).replace('.', '')
@@ -2537,7 +2535,7 @@ def barcodezebra(request):
             Code128 = barcode.get_barcode_class('code128')
 
             # Create barcode instance with the ImageWriter for PNG output
-            code = Code128(ref, writer=ImageWriter())
+            code = Code128(product.coderef, writer=ImageWriter())
 
             # Save barcode image to buffer
             code.write(buffer, {
@@ -2549,10 +2547,9 @@ def barcodezebra(request):
 
             # Convert image to base64 string
             qr_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
             # Append data
             barcodes.append([
-                ref,
+                product.coderef,
                 name,
                 f"{price}{remise1}",
                 qr_base64,
