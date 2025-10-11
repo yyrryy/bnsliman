@@ -790,7 +790,8 @@ def facture(request):
 
 def suppliercommanproducts(request):
     supplierid=request.POST.get('supplierid')
-    products=Produit.objects.filter(suppliercommand_id=supplierid)
+    isfarah=request.POST.get('target')=='f'
+    products=Produit.objects.filter(suppliercommand_id=supplierid, farahproduct=isfarah)
     return JsonResponse({
         'data':render(request, 'suppliercommandproducts.html', {'products':products}).content.decode('utf-8')
     })
@@ -5206,6 +5207,7 @@ def searchproductbonsortie(request):
 def searchproductforbonachat(request):
     term=request.GET.get('term')
     target=request.GET.get('target')
+    isfarah=target=='f'
     search_terms = term.split('+')
     print(search_terms)
 
@@ -5221,10 +5223,9 @@ def searchproductforbonachat(request):
             Q(diametre__icontains=term)|
             Q(coderef__startswith=term) |
             Q(cars__icontains=term)
-
         )
     # check if term in product.ref or product.name
-    products=Produit.objects.filter(q_objects)
+    products=Produit.objects.filter(q_objects).filter(farahproduct=isfarah)
     # check if term in product.ref or product.name
 
     results=[]
@@ -7075,13 +7076,11 @@ def searchproductsforstock(request):
     term=request.GET.get('term')
     target=request.GET.get('target')
     term = request.GET.get('term').lower()
-
+    isfarah=target=='f'
     # Remove non-alphanumeric characters and convert to lowercase
-
     if not '+' in term:
-
         # check if term in product.ref or product.name
-        products=Produit.objects.filter(ref__istartswith=term)
+        products=Produit.objects.filter(ref__istartswith=term, farahproduct=isfarah)
 
         q_objects = Q()
         q_objects &= (
@@ -7097,7 +7096,7 @@ def searchproductsforstock(request):
             Q(refeq4__icontains=term)
         )
             # adding other products that have equivalent
-        products=products | Produit.objects.filter(q_objects)
+        products=products | Produit.objects.filter(farahproduct=isfarah).filter(q_objects)
     else:
         # Split the cleaned term into individual words separated by '*'
         search_terms = term.split('+')

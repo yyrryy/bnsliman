@@ -873,8 +873,9 @@
             url: "{% url 'products:suppliercommanproducts' %}",
             type: 'POST',
             data: {
-                'supplierid': supplierid,
-                'csrfmiddlewaretoken': '{{csrf_token}}'
+              'supplierid': supplierid,
+              'csrfmiddlewaretoken': '{{csrf_token}}',
+              'target':target
             },
             success: function(data){
                 console.log(data)
