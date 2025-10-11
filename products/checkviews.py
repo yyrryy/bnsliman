@@ -2542,7 +2542,7 @@ def barcodezebra(request):
                 'write_text': False,   # 🚫 Disable text label
                 'module_width': 0.3,
                 'module_height': 15.0,
-                'quiet_zone': 2.0
+                'quiet_zone': 0.0
             })
 
             # Convert image to base64 string
