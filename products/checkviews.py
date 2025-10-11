@@ -2507,7 +2507,7 @@ def barcodezebra(request):
     supplierid=request.GET.get('supplierid')
     suppliercode=Supplier.objects.get(pk=supplierid).code
     date=request.GET.get('date')
-    date=datetime.strptime(date, '%Y-%m-%d').strftime('%d/%m/%y')
+    date=datetime.strptime(date, '%Y-%m-%d').strftime('%m%y')
     target=request.GET.get('target')
     isfarah=target=='f'
     barcodes = []
@@ -2551,7 +2551,7 @@ def barcodezebra(request):
             barcodes.append([
                 product.coderef,
                 name,
-                f"{price}{remise1}",
+                f"{suppliercode}{date}{remise1}{price}",
                 qr_base64,
                 suppliercode,
                 date
