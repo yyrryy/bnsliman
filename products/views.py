@@ -6179,7 +6179,7 @@ def excelpdcts(request):
     target=request.POST.get('target')
     df = pd.read_excel(myfile)
     entries=0
-    for d in df.itertuples()[:10]:
+    for d in df.itertuples():
         
         try:
             ref = d.name.split()[-1].lower().strip()
