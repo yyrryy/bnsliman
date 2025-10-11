@@ -2530,44 +2530,46 @@ def barcodezebra(request):
         
         # Generate barcodes for the specified quantity
         thisbarcodes=[]
-        # for _ in range(int(qty)):
-        #     buffer = BytesIO()
-        #     barcode_instance = code_class(ref, writer=ImageWriter())
-        #     options = {
-        #         'write_text': False,
-        #         'dpi': 300,           # Adjust module width for precision
-        #         #'module_width': barcode_width_inches,
-        #         'module_height': 0.8,
-        #     }
-        #     barcode_instance.write(buffer, options)
-
-        #     # Convert the image to base64 and append it to the list
-        #     barcode_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        #     thisbarcodes.append([ref, name, price, barcode_base64])
-        #     buffer.close()
-        # barcodes.append(thisbarcodes)
         for _ in range(int(qty)):
             buffer = BytesIO()
-            qr = qrcode.QRCode(
-                version=1,  # Controls the size of the QR code
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=8,
-                border=0,
-            )
-            qr.add_data(ref)
-            qr.make(fit=True)
+            barcode_instance = code_class(ref, writer=ImageWriter())
+            options = {
+                'write_text': False,
+                'dpi': 300,           # Adjust module width for precision
+                #'module_width': barcode_width_inches,
+                'module_height': 0.8,
+            }
+            barcode_instance.write(buffer, options)
 
-            img = qr.make_image(fill='black', back_color='white')
-            img.save(buffer, format="PNG")
-            # get 2 digits of price %2
-            
             # Convert the image to base64 and append it to the list
-            qr_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-            
-            barcodes.append([ref, name, f"{price:.2f}".replace('.', ''), qr_base64, suppliercode, date])
-            #thisbarcodes.append([ref, name, f"{price:.2f}".replace('.', ''), qr_base64, supplierid, date])
+            barcode_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            thisbarcodes.append([ref, name, price, barcode_base64])
             buffer.close()
-        #barcodes.append(thisbarcodes)
+        barcodes.append(thisbarcodes)
+        
+        #### qr code generation###
+        # for _ in range(int(qty)):
+        #     buffer = BytesIO()
+        #     qr = qrcode.QRCode(
+        #         version=1,  # Controls the size of the QR code
+        #         error_correction=qrcode.constants.ERROR_CORRECT_L,
+        #         box_size=8,
+        #         border=0,
+        #     )
+        #     qr.add_data(ref)
+        #     qr.make(fit=True)
+
+        #     img = qr.make_image(fill='black', back_color='white')
+        #     img.save(buffer, format="PNG")
+        #     # get 2 digits of price %2
+            
+        #     # Convert the image to base64 and append it to the list
+        #     qr_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            
+        #     barcodes.append([ref, name, f"{price:.2f}".replace('.', ''), qr_base64, suppliercode, date])
+        #     #thisbarcodes.append([ref, name, f"{price:.2f}".replace('.', ''), qr_base64, supplierid, date])
+        #     buffer.close()
+        # #barcodes.append(thisbarcodes)
         # if achat means the request is coming from bon achat, date will be today
     #barcodes=[barcodes[i:i+65] for i in range(0, len(barcodes), 65)]
     
