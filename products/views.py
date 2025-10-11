@@ -6209,7 +6209,6 @@ def excelpdcts(request):
         #         product.priceinitial=buyprice
         #     product.save()
         # except Exception as e:
-        print('>> ', ref, e)
         print('>> creating with coderef', coderef)
         product=Produit.objects.create(
             ref=ref,
