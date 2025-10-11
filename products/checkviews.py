@@ -2522,8 +2522,8 @@ def barcodezebra(request):
         name=i['name']
         remise1=0 if i['remise1']=='' else float(i['remise1'])
         price=i['price']
-        net=float(price)-(float(price)*int(remise1)/100)
-        price=round(net*2, 2)
+        # net=float(price)-(float(price)*int(remise1)/100)
+        # price=round(net*2, 2)
         #price=str(price).replace('.', '')
         qty=float(i['qty'])
         # # List to hold the barcodes in base64 format
@@ -2532,20 +2532,36 @@ def barcodezebra(request):
         thisbarcodes=[]
         for _ in range(int(qty)):
             buffer = BytesIO()
-            barcode_instance = code_class(ref, writer=ImageWriter())
-            options = {
-                'write_text': False,
-                'dpi': 300,           # Adjust module width for precision
-                #'module_width': barcode_width_inches,
-                'module_height': 0.8,
-            }
-            barcode_instance.write(buffer, options)
 
-            # Convert the image to base64 and append it to the list
-            barcode_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-            thisbarcodes.append([ref, name, price, barcode_base64])
+            # ✅ Use get_barcode_class instead of get()
+            Code128 = barcode.get_barcode_class('code128')
+
+            # Create barcode instance with the ImageWriter for PNG output
+            code = Code128(ref, writer=ImageWriter())
+
+            # Save barcode image to buffer
+            code.write(buffer, {
+                'write_text': False,   # 🚫 Disable text label
+                'module_width': 0.3,
+                'module_height': 15.0,
+                'quiet_zone': 2.0
+            })
+
+            # Convert image to base64 string
+            qr_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+            # Append data
+            barcodes.append([
+                ref,
+                name,
+                f"{price}{remise1}",
+                qr_base64,
+                suppliercode,
+                date
+            ])
+
             buffer.close()
-        barcodes.append(thisbarcodes)
+        # barcodes.append(thisbarcodes)
         
         #### qr code generation###
         # for _ in range(int(qty)):
@@ -2573,7 +2589,7 @@ def barcodezebra(request):
         # if achat means the request is coming from bon achat, date will be today
     #barcodes=[barcodes[i:i+65] for i in range(0, len(barcodes), 65)]
     
-    
+    print('>> len barcodes', len(barcodes), qty)
     return render(request, 'barcodezebra.html', {
         'barcodes': barcodes,
     })

@@ -17,8 +17,8 @@
         /* Define label size based on your thermal printer */
         .label {
              /* 20% for 5 items per row with gap */
-            min-width: 38mm; /* Adjust to match your label size */
-            height: 21.2mm; /* Adjust to match your label size */
+            min-width: 48mm; /* Adjust to match your label size */
+            height: 28mm; /* Adjust to match your label size */
             overflow: hidden;
             /* display: flex;
             flex-direction: column;
@@ -30,7 +30,7 @@
         /* Ensure barcode images fit properly */
         .barcode-img {
             width: 100%;
-            height: auto;
+            height: 45px;
         }
 
         /* Hide everything except the barcodes when printing */
@@ -51,9 +51,10 @@
                     <strong>{{i.0.upper}}</strong>
                     <!-- <strong style="position: absolute;">{{i.0.upper}}</strong> -->
                 </div>
+                <img class="barcode-img" src="data:image/png;base64,{{i.3}}" alt="Barcode" style="margin-top: auto;">
                 <div class="d-flex justify-content-between">
                     <strong>
-                        {{i.4}}000{{i.2|floatformat:-2}}
+                        {{i.4}}000{{i.2}}
                     </strong>
                     <strong>
                         {{i.5}}
@@ -61,9 +62,7 @@
                 </div>
                 <div class="d-flex">
                 <!-- <div class="d-flex justify-content-between align-items-center"> -->
-                <div class="col-4">
-                    <img class="barcode-img" src="data:image/png;base64,{{i.3}}" alt="Barcode" style="margin-top: auto;">
-                </div>
+                
                 <div style="font-size: 10px; margin-left: 3px;">{{i.1}}</div>
                 </div>
                 <!-- <div class="col-4"> -->
