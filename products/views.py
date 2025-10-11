@@ -6179,12 +6179,12 @@ def excelpdcts(request):
     target=request.POST.get('target')
     df = pd.read_excel(myfile)
     entries=0
-    for d in df.itertuples():
+    for d in df.itertuples()[:10]:
+        
         try:
             ref = d.name.split()[-1].lower().strip()
         except:
             ref=d.name.split()[-1]
-        print('>>ref', ref)
         #reps=json.dumps(d.rep)
         farahref=f'lu-{ref}'
         name = d.name
@@ -6197,6 +6197,7 @@ def excelpdcts(request):
         try:
             product=Produit.objects.get(ref=ref)
             print('>> product exist', ref)
+            print('>> assign coderef', coderef)
             product.coderef=coderef
             if target=='f':
                 product.stocktotalfarah=qty
@@ -6208,7 +6209,8 @@ def excelpdcts(request):
                 product.priceinitial=buyprice
             product.save()
         except Exception as e:
-            print('>>>', e, ref)
+            print('>> ', ref, e)
+            print('>> creating with coderef', coderef)
             product=Produit.objects.create(
                 ref=ref,
                 name=name,
@@ -6243,15 +6245,15 @@ def excelqtypdcts(request):
     myfile = request.FILES['excelFile']
     df = pd.read_excel(myfile)
     entries=0
-    for d in df.itertuples():
+    for d in df.itertuples()[:10]:
         try:
             ref = d.ref.lower().strip()
         except:
             ref=d.ref
         qty = 0 if pd.isna(d.qty) else d.qty
         price = 0 if pd.isna(d.price) else d.price
+        print('>> isfarah', isfarah)
         try:
-            print('entering', ref)
             product=Produit.objects.get(ref=ref)
             if isfarah:
                 product.stocktotalfarah+=qty
@@ -6265,7 +6267,7 @@ def excelqtypdcts(request):
             entries+=1
 
         except Exception as e:
-            print('>>',e, ref)
+            print('>>',ref, e)
             with open('error.txt', 'a') as ff:
                 ff.write(f'>> {e} {ref}')
             
