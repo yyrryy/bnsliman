@@ -5188,9 +5188,9 @@ def searchproductbonsortie(request):
     term=request.GET.get('term').lower().strip()
     print('>> startsw', term.startswith('union-'))
     if term.startswith('union-'):
-        term=term.replace('union-','')
-        products=Produit.objects.filter(farahproduct=True).filter(Q(ref__startswith=term) |Q
-        (coderef__startswith=term))
+        term2=term.replace('union-','')
+        products=Produit.objects.filter(farahproduct=True).filter(Q(ref__startswith=term2) |Q
+        (coderef__startswith=term2))
     else:
         products=Produit.objects.filter(farahproduct=False).filter(Q(ref__startswith=term) |Q
         (coderef__startswith=term))
