@@ -26,11 +26,10 @@
           td > div {
               margin: 4px; /* Ensure inner spacing for table cells */
           }
-      
           /* Optional: Adjust margins for precise alignment */
           @page {
-              size: A6;
-              margin: 0; /* Remove any default margins */
+            size: {%if A6 %}10.5cm{%else%}14.8cm{%endif%} auto;
+            margin: 0; /* Remove any default margins */
           }
       }
       </style>

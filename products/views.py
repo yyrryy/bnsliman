@@ -428,7 +428,8 @@ def addoneproduct(request):
             block=block,
             carlogos_id=logo,
             isactive=False,
-            farahref='lu-'+ref
+            farahref='lu-'+ref,
+            farahproduct=isfarah
         )
         if isfarah:
             product.frsellprice=sellprice
