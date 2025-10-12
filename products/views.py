@@ -5191,10 +5191,10 @@ def searchproductbonsortie(request):
         term2=term.replace('union-','')
         print('>> term2', term2)
         products=Produit.objects.filter(farahproduct=True).filter(Q(ref__startswith=term2) |Q
-        (coderef__startswith=term2))
+        (coderef=term2))
     else:
         products=Produit.objects.filter(farahproduct=False).filter(Q(ref__startswith=term) |Q
-        (coderef__startswith=term))
+        (coderef=term))
     print('>> products', products)
     results=[]
     for i in products:
