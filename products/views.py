@@ -5190,7 +5190,7 @@ def searchproductbonsortie(request):
         products=Produit.objectsfilter(farahproduct=True).filter(Q(ref__startswith=term) |Q
         (coderef__startswith=term))
     else:
-        products=Produit.objectsfilter(farahproduct=False).filter(Q(ref__startswith=term) |Q
+        products=Produit.objects.filter(farahproduct=False).filter(Q(ref__startswith=term) |Q
         (coderef__startswith=term))
     results=[]
     for i in products:
