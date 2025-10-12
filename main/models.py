@@ -466,6 +466,7 @@ class Order(models.Model):
         return self.client.name+' '+str(self.total)
 
 class Avanceclient(models.Model):
+    caissetarget=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='tocaisseavance')
     client=models.ForeignKey(Client, on_delete=models.CASCADE, default=None, null=True)
     date = models.DateTimeField(default=None)
     amount = models.FloatField()
@@ -488,10 +489,10 @@ class Avanceclient(models.Model):
 class Transfer(models.Model):
     date = models.DateTimeField(default=None)
     amount = models.FloatField()
-    caissetarget=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='fromcaisse')
-    caissesource=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='tocaisse')
-    banksource=models.ForeignKey('Bank', on_delete=models.SET_NULL, default=None, null=True, related_name='frombank')
-    banktarget=models.ForeignKey('Bank', on_delete=models.SET_NULL, default=None, null=True, related_name='tobank')
+    caissetarget=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='tocaisse')
+    caissesource=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='fromcaisse')
+    banksource=models.ForeignKey('Bank', on_delete=models.SET_NULL, default=None, null=True, related_name='tobank')
+    banktarget=models.ForeignKey('Bank', on_delete=models.SET_NULL, default=None, null=True, related_name='frombank')
     note=models.TextField(default=None, null=True, blank=True)
 
 class Avancesupplier(models.Model):
@@ -638,6 +639,7 @@ class Notesrepresentant(models.Model):
 
 
 class PaymentClientbl(models.Model):
+    caissetarget=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='toaisse')
     code=models.CharField(max_length=100, default=None, null=True, blank=True)
     dateregl = models.DateTimeField(default=None, null=True, blank=True)
     client=models.ForeignKey(Client, on_delete=models.CASCADE, default=None, null=True, blank=True)

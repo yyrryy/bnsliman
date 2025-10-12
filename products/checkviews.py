@@ -286,7 +286,7 @@ def addbonsortie(request):
         )
         regl.bonsortie.set([order])
         if caissetarget:
-            print('>> add to caisse', caissetarget)
+            print('>> add to caisse', caissetarget, payment)
             caisse=Caisse.objects.get(pk=caissetarget)
             caisse.amount+=float(payment)
             caisse.save()
@@ -3532,9 +3532,10 @@ def caisseviewdata(request):
     # ins
     caisseid=request.GET.get('caisseid')
     caisse=Caisse.objects.get(pk=caisseid)
-    reglement=PaymentClientbl.objects.filter(targetcaisse_id=caisseid).annotate(type=Value("reglement"))
-    transfer=Transfer.objects.filter(caissetarget_id=caisseid).annotate(type=Value("transfer"))
-    avance=Avanceclient.objects.filter(targetcaisse_id=caisseid).annotate(type=Value("avance"))
+    reglement=PaymentClientbl.objects.filter(caissetarget=caisse)
+    print('>> caisseid', caisseid, reglement)
+    transfer=Transfer.objects.filter(caissetarget=caisse).annotate(type=Value("transfer"))
+    avance=Avanceclient.objects.filter(caissetarget=caisse).annotate(type=Value("avance"))
     totalins=round(reglement.aggregate(Sum('amount'))['amount__sum'] or 0, 2)+round(transfer.aggregate(Sum('amount'))['amount__sum'] or 0, 2)+round(avance.aggregate(Sum('amount'))['amount__sum'] or 0, 2)
     # merge abs sort all ins in one list
     # import
