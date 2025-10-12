@@ -5187,7 +5187,7 @@ def searchproductbonsortie(request):
     # get url pams
     term=request.GET.get('term').lower().strip()
     products=Produit.objects.filter(Q(ref__startswith=term) |Q
-    (coderef=term) |Q
+    (coderef=term))
     print('term>>', term)
     results=[]
     for i in products:
