@@ -5198,6 +5198,7 @@ def searchproductbonsortie(request):
     print('>> products', products)
     results=[]
     for i in products:
+        print('>> strswu in products', term, term.startswith('union-'))
         ref=i.farahref if term.startswith('union-') else i.ref
         results.append({
             'id':f'{i.ref}§{i.name}§{i.buyprice}§{i.stocktotalfarah}§{i.stockfacturefarah}§{i.stocktotalorgh}§{i.stockfactureorgh}§{i.id}§{i.sellprice}§{i.remisesell}§{i.prixnet}§{i.representprice}§{term}',
