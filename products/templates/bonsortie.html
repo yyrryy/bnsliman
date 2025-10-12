@@ -935,7 +935,7 @@
           let addprice=$(this).parent().parent().find('input[name="addprice"]')
           let addremise=$(this).parent().parent().find('input[name="addremise"]')
           let addqty=$(this).parent().parent().find('input[name="addqty"]')
-          if (term.startsWith('union-')){
+          if (term.startsWith('union-') || term.endsWith('lu')){
             addqty.attr('max', stocktotalfarah)
             // add a sign to addrowbtn to use it when adding row #sfefr435
             // 1 means thsi product is a farah product
