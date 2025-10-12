@@ -5186,12 +5186,15 @@ def loadjournalventefc(request):
 def searchproductbonsortie(request):
     # get url pams
     term=request.GET.get('term').lower().strip()
-    products=Produit.objects.filter(Q(ref__startswith=term) |Q
-    (coderef=term))
-    print('term>>', term)
+    if term.startswith('union-'):
+        products=Produit.objectsfilter(farahproduct=True).filter(Q(ref__startswith=term) |Q
+        (coderef__startswith=term))
+    else:
+        products=Produit.objectsfilter(farahproduct=False).filter(Q(ref__startswith=term) |Q
+        (coderef__startswith=term))
     results=[]
     for i in products:
-        ref=i.farahref if term.startswith('lu-') else i.ref
+        ref=i.farahref if term.startswith('union-') else i.ref
         results.append({
             'id':f'{i.ref}§{i.name}§{i.buyprice}§{i.stocktotalfarah}§{i.stockfacturefarah}§{i.stocktotalorgh}§{i.stockfactureorgh}§{i.id}§{i.sellprice}§{i.remisesell}§{i.prixnet}§{i.representprice}§{term}',
             'text':f'{ref.upper()} - {i.name.upper()}',
