@@ -7,6 +7,10 @@
     <title>Print Example</title>
     <style>
       @media print {
+        @page {
+            size: {%if A6 %}10.5cm{%else%}14.8cm{%endif%} auto;
+            margin: 0; /* Remove any default margins */
+          }
           .livraison-holder {
               height: 14.8cm; /* Exact height of A6 */
               width: 10.5cm; /* Exact width of A6 */
@@ -16,7 +20,6 @@
               margin: 0;
               padding: 0;
           }
-      
           /* Reset margins and paddings for printing */
           body {
               margin: 0;
@@ -27,10 +30,7 @@
               margin: 4px; /* Ensure inner spacing for table cells */
           }
           /* Optional: Adjust margins for precise alignment */
-          @page {
-            size: {%if A6 %}10.5cm{%else%}14.8cm{%endif%} auto;
-            margin: 0; /* Remove any default margins */
-          }
+          
       }
       </style>
       
@@ -44,10 +44,11 @@
   
   
   {% for i in orderitems %}
-  <div id="printbl{{order.id}}" class="bonbody position-relative" style="height: 21cm;width: 14.8cm">
+  <div id="printbl{{order.id}}" class="bonbody position-relative">
+    <!-- style="height: 21cm;width: 14.8cm" -->
   {% if forloop.counter == orderitems|length %}
   <!-- last iteration -->
-    <div class="px-2 d-flex flex-column postion-relative livraison{{order.id}}holder p-3" style="height: {% if A6 %}14.8cm{% else %}21cm{%endif%};width: {%if A6 %}10.5cm{%else%}14.8cm{%endif%}; margin:auto;">
+    <div class="px-2 d-flex flex-column postion-relative livraison{{order.id}}holder p-3" style="margin:auto;">
       <!-- header -->
       <div class="row">
         <div class="col-3">
@@ -118,7 +119,7 @@
               <td style="white-space: nowrap; padding:3px">
                   {% for v in i %}
 
-                  {{v.product.category.name.upper}}
+                  {{v.product.name.upper}}
                   <br>
                   {% endfor %}
               </td>
