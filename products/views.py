@@ -10716,7 +10716,7 @@ def sortieprint2(request, id):
     orderitems=Sortieitem.objects.filter(bon=order).order_by('product__name')
     orderitems=list(orderitems)
     if a6:
-        orderitems=[orderitems[i:i+15] for i in range(0, len(orderitems), 15)]
+        orderitems=[orderitems[i:i+1] for i in range(0, len(orderitems), 1)]
     else:
         orderitems=[orderitems[i:i+25] for i in range(0, len(orderitems), 25)]
     
