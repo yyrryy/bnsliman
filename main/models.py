@@ -489,6 +489,7 @@ class Avanceclient(models.Model):
 class Transfer(models.Model):
     date = models.DateTimeField(default=None)
     amount = models.FloatField()
+    recu = models.CharField(max_length=500, default=None, null=True, blank=True)
     caissetarget=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='tocaisse')
     caissesource=models.ForeignKey(Caisse, on_delete=models.SET_NULL, default=None, null=True, related_name='fromcaisse')
     banksource=models.ForeignKey('Bank', on_delete=models.SET_NULL, default=None, null=True, related_name='tobank')

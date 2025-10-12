@@ -475,12 +475,12 @@ def validatebonsortie(request):
 
         if i.isfarah:
             totalfarah += item_total
-            livraison_data['ref']=i.ref.replace('(FR) ', '')
+            livraison_data['ref']=i.ref.replace('(UPA) ', '')
             livraison_data['isfarah'] = True
             farahitems.append(Livraisonitem(**livraison_data))
         else:
             totalorgh += item_total
-            livraison_data['ref']=i.ref.replace('(OR) ', '')
+            livraison_data['ref']=i.ref.replace('(CMPA) ', '')
             livraison_data['isorgh'] = True
             orghitems.append(Livraisonitem(**livraison_data))
     
@@ -509,11 +509,10 @@ def validatebonsortie(request):
         if is_farah:
             bon_data['isfarah'] = True
             # the client of the bon created will always be the first client
-            bon_data['client'] = Client.objects.get(code='CF-1')
+            bon_data['client'] = bon.client
         else:
             bon_data['isorgh'] = True
-            bon_data['client'] = Client.objects.get(code='CO-1')
-        
+            bon_data['client'] = bon.client
         new_bon = Bonlivraison.objects.create(**bon_data)
         
         for item in items:
@@ -3479,23 +3478,24 @@ def transfertfromcaisse(request):
     sourceid=request.GET.get('sourceid')
     caisse=Caisse.objects.get(pk=sourceid)
     amount=request.GET.get('amount')
+    recu=request.GET.get('recu')
     date=request.GET.get('date')
     caissetarget=request.GET.get('caissetarget') or None
     banktarget=request.GET.get('banktarget') or None
     if caissetarget:
         caissetarget=Caisse.objects.get(pk=caissetarget)
         print('>> target caisse', caissetarget)
-        caisse.total-=float(amount)
-        caissetarget.total+=float(amount)
+        caisse.amount-=float(amount)
+        caissetarget.amount+=float(amount)
         caissetarget.save()
     if banktarget:
         banktarget=Bank.objects.get(pk=banktarget)
         print('>> target bank', banktarget)
-        caisse.total-=float(amount)
-        banktarget.total+=float(amount)
+        caisse.amount-=float(amount)
+        banktarget.amount+=float(amount)
         banktarget.save()
     caisse.save()
-    Transfer.objects.create(caissesource=caisse, caissetarget=caissetarget, amount=amount, 
+    Transfer.objects.create(caissesource=caisse, caissetarget=caissetarget, amount=amount, recu=recu, 
     banktarget=banktarget,
     date=date)
     return JsonResponse({

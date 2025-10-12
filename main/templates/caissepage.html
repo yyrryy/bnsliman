@@ -63,6 +63,10 @@
                                             <input type="number" class="form-control mantantfromcaisse{{item.id}}" placeholder="0.00">
                                         </div>
                                         <div class="form-group me-2">
+                                            <label for="name">N° recu</label>
+                                            <input type="number" class="form-control recufromcaisse{{item.id}}" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group me-2">
                                             <label for="name">transfert au caisse</label>
                                             <select class="targetcaissefromcaisse{{item.id}} form-control">
                                                 <option value="">--</option>
@@ -156,10 +160,14 @@
                                 <div class="d-flex">
                                     <div class="form-group me-2">
                                         <label for="name">Date</label>
-                                        <input type="date" class="form-control datefrombank{{item.id}}" placeholder="0.00">
+                                        <input type="date" class="form-control datefrombank{{item.id}}" placeholder="0.00" value="{% now 'Y-m-d' %}">
                                     </div>
                                     <div class="form-group me-2">
                                         <label for="name">Mantant</label>
+                                        <input type="number" class="form-control mantantfrombank{{item.id}}" placeholder="0.00">
+                                    </div>
+                                    <div class="form-group me-2">
+                                        <label for="name">N° recu</label>
                                         <input type="number" class="form-control mantantfrombank{{item.id}}" placeholder="0.00">
                                     </div>
                                     <div class="form-group me-2">
@@ -214,6 +222,7 @@
     function transfertfromcaisse(id, caissetotal){
         var targetcaisse = $('.targetcaissefromcaisse'+id).val();
         var mantant = $('.mantantfromcaisse'+id).val();
+        var recu = $('.recufromcaisse'+id).val();
         var date = $('.datefromcaisse'+id).val();
         if (date==''){
             alertify.error('Veuillez saisir une date');
@@ -240,6 +249,7 @@
         $.get('/products/transfertfromcaisse',{
             amount:mantant,
             date:date,
+            recu:recu,
             caissetarget: targetcaisse,
             banktarget: targetbank,
             sourceid: id
