@@ -5187,7 +5187,7 @@ def searchproductbonsortie(request):
     # get url pams
     term=request.GET.get('term').lower().strip()
     if term.startswith('union-'):
-        products=Produit.objectsfilter(farahproduct=True).filter(Q(ref__startswith=term) |Q
+        products=Produit.objects.filter(farahproduct=True).filter(Q(ref__startswith=term) |Q
         (coderef__startswith=term))
     else:
         products=Produit.objects.filter(farahproduct=False).filter(Q(ref__startswith=term) |Q
