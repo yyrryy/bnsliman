@@ -1109,6 +1109,7 @@ class Devi(models.Model):
     rest=models.FloatField(default=0.00)
     bon_no=models.CharField(max_length=50, null=True, default=None)
     note=models.CharField(max_length=5500, null=True, default=None)
+    target=models.CharField(max_length=5500, null=True, default=None)
     isfarah=models.BooleanField(default=False)
     isorgh=models.BooleanField(default=False)
     generatedbl=models.BooleanField(default=False)

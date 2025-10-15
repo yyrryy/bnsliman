@@ -503,7 +503,7 @@ def validatebonsortie(request):
             'note': bon.note,
             'bonsortie':bon,
             # make created bon paid if the original bon is paid
-            #'ispaid':bonpaid
+            'ispaid':bonpaid
         }
         
         if is_farah:
@@ -894,14 +894,14 @@ def listdevi(request):
     suppliersection=request.GET.get('suppliersection')=='1'
     if target=='f':
         if suppliersection:
-            bons=Devi.objects.filter(isfarah=True, forsupplier=True).order_by('-bon_no')[:50]
+            bons=Devi.objects.filter(target=target, forsupplier=True).order_by('-bon_no')[:50]
         else:
-            bons=Devi.objects.filter(isfarah=True).order_by('-bon_no')[:50]
+            bons=Devi.objects.filter(target=target).order_by('-bon_no')[:50]
     else:
         if suppliersection:
-            bons=Devi.objects.filter(isorgh=True, forsupplier=True).order_by('-bon_no')[:50]
+            bons=Devi.objects.filter(target=target, forsupplier=True).order_by('-bon_no')[:50]
         else:
-            bons=Devi.objects.filter(isorgh=True).order_by('-bon_no')[:50]
+            bons=Devi.objects.filter(target=target).order_by('-bon_no')[:50]
     ctx={
         'title':'Devi',
         'bons':bons,
@@ -960,7 +960,7 @@ def createdevi(request):
             receipt_no = f"LU-DV{year}{latest_receipt_no + 1:09}"
         else:
             receipt_no = f"LU-DV{year}000000001"
-    else:
+    elif target=='o':
         isorgh=True
         year = timezone.now().strftime("%y")
         latest_receipt = Devi.objects.filter(
@@ -968,9 +968,19 @@ def createdevi(request):
         ).last()
         if latest_receipt:
             latest_receipt_no = int(latest_receipt.bon_no[-9:])
-            receipt_no = f"DV{year}{latest_receipt_no + 1:09}"
+            receipt_no = f"S-DV{year}{latest_receipt_no + 1:09}"
         else:
-            receipt_no = f"DV{year}000000001"
+            receipt_no = f"S-DV{year}000000001"
+    else:
+        year = timezone.now().strftime("%y")
+        latest_receipt = Devi.objects.filter(
+            bon_no__startswith=f'S-DV{year}'
+        ).last()
+        if latest_receipt:
+            latest_receipt_no = int(latest_receipt.bon_no[-9:])
+            receipt_no = f"S-DV{year}{latest_receipt_no + 1:09}"
+        else:
+            receipt_no = f"S-DV{year}000000001"
     clientid=request.POST.get('clientid')
     products=request.POST.get('products')
     totalbon=request.POST.get('totalbon')
@@ -995,6 +1005,7 @@ def createdevi(request):
         note=note,
         isfarah=isfarah,
         isorgh=isorgh,
+        target=target,
         user=request.user
     )
     # if len(json.loads(products))>0:
@@ -3054,12 +3065,10 @@ def validerbulk(request):
             print('bon already generated')
         else:
             items = Sortieitem.objects.filter(bon=i)
-            
             # Prepare Livraisonitems
             for item in items:
                 product = item.product
                 item_total = float(item.total)
-                
                 livraison_data = {
                     'total': item_total,
                     'qty': item.qty,
@@ -3076,14 +3085,14 @@ def validerbulk(request):
                     if not i.bon_no in notefarah:
                         notefarah+=i.bon_no+' '
                     totalfarah += item_total
-                    livraison_data['ref']=item.ref.replace('(FR) ', '')
+                    livraison_data['ref']=item.ref.replace('(UPA) ', '')
                     livraison_data['isfarah'] = True
                     farahitems.append(Livraisonitem(**livraison_data))
                 else:
                     if not i.bon_no in noteorgh:
                         noteorgh+=i.bon_no+' '
                     totalorgh += item_total
-                    livraison_data['ref']=item.ref.replace('(OR) ', '')
+                    livraison_data['ref']=item.ref.replace('(CMPA) ', '')
                     livraison_data['isorgh'] = True
                     orghitems.append(Livraisonitem(**livraison_data))
         
@@ -3104,7 +3113,8 @@ def validerbulk(request):
             'bon_no': receipt_no,
             'note': notefarah,
             'isfarah':True,
-            'client':Client.objects.get(code='CF-1')
+            'client':i.client,
+            'ispaid':i.ispaid
             # make created bon paid if the original bon is paid
             #'ispaid':bonpaid
         }
@@ -3131,7 +3141,8 @@ def validerbulk(request):
             'bon_no': receipt_no,
             'note': noteorgh,
             'isorgh':True,
-            'client':Client.objects.get(code='CO-1')
+            'client':i.client,
+            'ispaid':i.ispaid
             # make created bon paid if the original bon is paid
             #'ispaid':bonpaid
         }

@@ -5253,6 +5253,7 @@ def searchproductforbonachat(request):
 def searchproduct(request):
     term=request.GET.get('term')
     target=request.GET.get('target')
+    isfarah=target=='f'
     search_terms = term.split('+')
     print(search_terms)
 
@@ -5270,14 +5271,9 @@ def searchproduct(request):
             Q(cars__icontains=term)
         )
     # check if term in product.ref or product.name
-    products=Produit.objects.filter(q_objects)
+    products=Produit.objects.filter(farahproduct=isfarah).filter(q_objects)
     # check if term in product.ref or product.name
-
     results=[]
-    print('>> products', products)
-    print('>> products', products[0].ref)
-    print('>> products', products[0].name)
-    print('>> products', products)
     for i in products:
         results.append({
             'id':f"{i.ref}§{i.name}§{i.buyprice}§{i.stocktotalfarah if target=='f' else i.stocktotalorgh}§{i.stockfacturefarah if target=='f' else i.stocktotalorgh}§{i.id}§{i.frsellprice if target=='f' else i.sellprice}§{i.frremisesell if target=='f' else i.remisesell}§{i.prixnet}§{i.representprice}",
@@ -6361,8 +6357,9 @@ def stocksection(request):
 
 def stock(request):
     target=request.GET.get('target')
+    isfarah=target=='f'
     categories=Category.objects.all()
-    products=Produit.objects.all()[:50]
+    products=Produit.objects.filter(farahproduct=isfarah)[:50]
     ctx={
         'categories':categories,
         'isfarah':target=='f',
@@ -7132,6 +7129,7 @@ def searchproductsforstock(request):
 # loading stock by 50, 50records at a time
 def loadstock(request):
     target=request.GET.get('target')
+    isfarah=target=='f'
     page = int(request.GET.get('page', 1))
     term = request.GET.get('term')
     notactive = request.GET.get('notactive')
@@ -7142,8 +7140,7 @@ def loadstock(request):
     if term=='0':
         print('>>>>>>>>>>>>', term=='0')
         if notactive=='1':
-            print('from notactive')
-            products = Produit.objects.filter(isactive=False)[start:end]
+            products = Produit.objects.filter(isactive=False, farahproduct=isfarah)[start:end]
             # trs=''
             # for i in products:
             #     trs+=f"""
@@ -7211,7 +7208,7 @@ def loadstock(request):
                 'has_more': len(products) == per_page,
                 'target':target
             })
-        products = Produit.objects.all()[start:end]
+        products = Produit.objects.filter(farahproduct=isfarah)[start:end]
         trs=''
         # for i in products:
         #     trs+=f'''
@@ -7294,11 +7291,10 @@ def loadstock(request):
             if term:
 
                 q_objects &= (Q(ref__iregex=term) | Q(name__iregex=term) | Q(category__name__iregex=term) |  Q(mark__name__iregex=term))
-        products=Produit.objects.filter(q_objects)[start:end]
+        products=Produit.objects.filter(farahproduct=isfarah).filter(q_objects)[start:end]
         return JsonResponse({
             'trs':render(request, 'stocktrs.html', {'products':products, 'isfarah':target=='f'}).content.decode('utf-8'),
             'has_more': len(products) == per_page,
-            
         })
 
 def loadlistachat(request):
