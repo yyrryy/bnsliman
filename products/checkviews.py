@@ -916,7 +916,8 @@ def bondevi(request):
         'title':'Bon de Devi',
         'target':target
     }
-    return render(request, 'bondevi.html', ctx)
+    file='devipos.html' if target=='s' else 'bondevi.html'
+    return render(request, file, ctx)
 def boncommand(request):
     target=request.GET.get('target')
     
@@ -1027,8 +1028,6 @@ def createdevi(request):
                 isfarah=isfarah,
                 isorgh=isorgh
             )
-
-
     # increment it
     return JsonResponse({
         "success":True

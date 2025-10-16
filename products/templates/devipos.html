@@ -33,14 +33,15 @@
   <div class="bonsortieparentdiv">
          <div class="bg-white rounded border p-2 mb-3 data d-flex justify-content-between">
             <div class="col-5 row">
-                <div class="mb-2 clientselectposholder">
+                <div class="mb-2 clientselectdeviposholder">
                     <div class="alert alert-danger p-2 oldbonswarning d-none">
                       
                     </div>
                     <small>Clients:
                     </small>
                     <!-- <button type="button" name="button" class="btn bg-darkblue text-white" onclick="refreshselectclient(event)">↻</button> -->
-                    <select name="client" id="" style="width:100%;" class="clientselectpos form-select">
+
+                    <select name="client" id="" style="width:100%;" class="select2 clientselectdevipos form-select notemptylivraison select2client">
                         <!-- <option value="">---</option>
                         {% for i in clients %}
                         <option value="{{i.id}}">{{i.name}} | {{i.code}} | {{i.city}} | {{i.region}} | {{i.represent}} </option>
@@ -57,7 +58,7 @@
                     </select>
                 </div> -->
                 <div class="mb-2 col-4">
-                    <input type="date" class="form-control datebonbl" name="datebon" placeholder="Date bon">
+                  <input type="date" class="form-control datebonbl" name="datebon" placeholder="Date bon">
                 </div>
                 <div class="mb-2 col-4">
                   <input placeholder="transport" type="text" class="form-control transport" name="transport">
@@ -221,125 +222,7 @@
   </div>
 
   <script>
-    function processBarcode(barcode) {
-            // let bonitems = JSON.parse(localStorage.getItem('bonitemscomptoir')) || [];
-            // let pdcts = JSON.parse(localStorage.getItem('pdctsinbonsortiecomptoir')) || [];
-
-            console.log('>> br', barcode);
-            $.get('/products/scanproductdata', { 'barcode': barcode }, (data) => {
-                console.log('>> data', data)
-                if (data.results && data.results.length > 0) {
-                  let product = data.results[0]; // assume one result
-
-                  // Create a new Select2 option
-                  let option = new Option(product.text, product.id, true, true);
-
-                  // Add it to the select element
-                  $('#productsselect2').append(option).trigger('change');
-
-                  // Optional: highlight or show success message
-                  console.log('✅ Product added:', product.text);
-                } else {
-                  console.log('Produit introuvable pour le code-barres : ' + barcode);
-                }
-                // if (data.success){
-                //     let row = {
-                //         'article': data.ref + ' - ' + data.car,
-                //         'price': data.price,
-                //         'image': data.image,
-                //         'mark': data.mark,
-                //         'stock': data.stock,
-                //         'total': data.price,
-                //         'qty': 1,
-                //         'productid': data.id,
-                //         'prices': [data.price]
-                //     };
-                //     pdcts.push(data.id);
-                //     localStorage.setItem('pdctsinbonsortiecomptoir', JSON.stringify(pdcts));
-    
-                //     // Add the item to local storage
-                //     console.log(bonitems);
-                //     bonitems.push(row);
-                //     localStorage.setItem('bonitemscomptoir', JSON.stringify(bonitems));
-                //     console.log(row)
-    
-                //     // Add item to the DOM
-                //     $('.itemsbon').prepend(`
-                //         <tr class="item-row" id="itemrow${data.id}">
-                //             <td class="item-image">
-                //                 <img style="width:60%;" src="${data.image}">
-                //             </td>
-                //             <td id="item-name" class="item-name">
-                //                 <strong class="invoice-mark">${data.mark}</strong>
-                //             </td>
-                //             <td id="item-name" class="item-name">
-                //                 <strong class="invoice-item" id="invoice-item">${data.ref} - ${data.car}</strong>
-                //             </td>
-                //             <td>
-                //                 ${data.stock}
-                //             </td>
-                //             <td>
-                //                 <input readonly class="form-control qty" placeholder="Quantity" type="number" min=1 value="1" oninput="saverow(event)">
-                //             </td>
-                //             <td class="total">${data.price}</td>
-                //             <input readonly type="hidden" class="productid" value=${data.id}>
-                //             <td>
-                //                 <i class="btn btn-danger delete" title="Supprimer" productid="${data.id}" onclick="removeline(event, '${data.id}', '${data.out_id}')">Retour</i>
-                //             </td>
-                //         </tr>
-                //     `);
-                
-                // }else{
-                //     alertify.error(data.message)
-                // }
-            });
-        }
-        const charToNumberMap = {
-            '&': '1',
-            'é': '2',
-            '"': '3',
-            "'": '4',
-            '(': '5',
-            '-': '6',
-            'è': '7',
-            '_': '8',
-            'ç': '9',
-            'à': '0'
-        };
-
-        let barcode = '';
-        let typingTimer;
-
-        // Convert character to corresponding number if mapped
-        function convertCharToNumber(char) {
-            return charToNumberMap[char] || char;
-        }
-        $(document).on('keydown', function(event) {
           
-            // Ignore Shift, Control, Alt, etc.
-            if (event.key === 'Shift' || event.key === 'Alt' || event.key === 'Control') {
-              return;
-            }
-            if (typingTimer) clearTimeout(typingTimer);
-
-            if (event.which === 13) {  // Enter key detected
-                if (barcode) {
-                  console.log('>> brcode');
-                    processBarcode(barcode);
-                    barcode = ''; // Reset the barcode after processing
-                }
-            } else {
-                // Accumulate characters, converting to numbers if mapped
-                const key = event.key;
-                barcode += convertCharToNumber(key);
-
-                // Reset barcode if no keys are pressed within a certain time
-                typingTimer = setTimeout(() => {
-                    barcode = '';
-                }, 100);  // Adjust timeout as needed to filter unintended keystrokes
-            }
-        });
-            
     function paymentbon(){
       let total = parseFloat($('.totalbonsortie').text())
       let payment = parseFloat($('.payment').val())
@@ -358,7 +241,9 @@
       
     }
     $(function(){
-      $('.clientselectpos').select2({
+
+      $('.clientselectdevipos').select2({
+
         ajax: {
           type:'get',
           dataType: 'json',
@@ -681,7 +566,7 @@
 
     // finish
     $('.repsselectsbl').on('change', function(){
-      if ($(this).val()==''||$('.clientselectpos').val()==''){
+      if ($(this).val()==''||$('.clientselectdevipos').val()==''){
         parentdiv.find('.productsholder').addClass('d-none')
         return
       }else{
@@ -736,7 +621,7 @@
       }//end else
 
     })
-    $('.clientselectpos').on('change', function(){
+    $('.clientselectdevipos').on('change', function(){
       parentdiv=$(this).parent().parent().parent()
       parentdiv.find('.productsholder').removeClass('d-none')
         console.log('check for old unpaid bons')
@@ -870,7 +755,7 @@
     //localStorage.setItem('pdctsinbonsortie', '[]')
 
     $(document).ready(function(){
-      $('.clientselectpos').select2('open')
+      $('.clientselectdevipos').select2('open')
       // get products from localstorage
       pdcts=JSON.parse(localStorage.getItem('bonsortie')) || []
       total=localStorage.getItem('totalbonsortie') || 0
@@ -970,7 +855,7 @@
               data: {
                   'target':'bl',
                   'id': id,
-                  'clientid': $('.clientselectpos').val(),
+                  'clientid': $('.clientselectdevipos').val(),
                   'csrfmiddlewaretoken': '{{csrf_token}}',
                   // term to use it in case it has lu- to get buyprice
                   'term':term
@@ -990,7 +875,7 @@
 
       $('.submitbonsortie').on('click', (e)=>{
         parentdiv=$(e.target).parent().parent().parent().parent()
-        if (parentdiv.find('.clientselectpos').val()==null ||parentdiv.find('.clientselectpos').val()=='' || parentdiv.find('.datebonbl').val()=='' ){
+        if (parentdiv.find('.clientselectdevipos').val()==null ||parentdiv.find('.clientselectdevipos').val()=='' || parentdiv.find('.datebonbl').val()=='' ){
             parentdiv.find('.data').addClass('border border-danger')
             return
         }
@@ -1054,7 +939,7 @@
             alertify.error('NO PRODUCTS')
             return
           }
-          let clientid = parentdiv.find('.clientselectpos').val()
+          let clientid = parentdiv.find('.clientselectdevipos').val()
           let repid = parentdiv.find('.repsselectsbl').val()
           let datebon = parentdiv.find('.datebonbl').val()
           let transport = parentdiv.find('.transport').val()
@@ -1091,21 +976,22 @@
           parentdiv.find('.submitbonsortie').addClass('disabled')
           console.log(payment)
           $.ajax({
-              url: "{% url 'products:addbonsortie' %}",
+              url: "{% url 'products:createdevi' %}",
               type: 'POST',
               data: {
                 'remise':$('.remisecheck').is(':checked'),
                 'car':$('.cars').val(),
                 'caissetarget':$('.caissetarget').val(),
-                  'totalbon': totalbon,
-                  'clientid': clientid,
-                  'repid':repid,
-                  'transport':transport,
-                  'datebon': datebon,
-                  'note': note,
-                  'payment': payment,
-                  'products': JSON.stringify(products),
-                  'csrfmiddlewaretoken': '{{csrf_token}}'
+                'totalbon': totalbon,
+                'clientid': clientid,
+                'repid':repid,
+                'transport':transport,
+                'datebon': datebon,
+                'note': note,
+                'tqrget': 's',
+                'payment': payment,
+                'products': JSON.stringify(products),
+                'csrfmiddlewaretoken': '{{csrf_token}}'
               },
               success: function(data){
                 console.log('sent')

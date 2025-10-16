@@ -24,6 +24,18 @@
                 
                 <button class="btn btn-success mt-2 createcategorybtn">Ajouter</button>
             </form>
+            <table class="table table-bordered mt-2">
+                {% for i in categories%}
+                <tr>
+                    <td>
+                        {{i.name}}
+                    </td>
+                    <td>
+                        {{i.id}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
             <div class="mt-5" >
                 <input type="file" class="form-control excelfile">
                 <button class="btn-success btn-sm w-100" onclick="excelcategories(event)" style="

@@ -17,7 +17,18 @@
                     <button class="btn btn-primary w-100 mt-2 createmarquebtn">Ajouter</button>
                 
                 </form>
-
+                <table class="table table-bordered mt-2">
+                    {% for i in marques%}
+                    <tr>
+                        <td>
+                            {{i.name}}
+                        </td>
+                        <td>
+                            {{i.id}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
                 <div class="mt-5" >
                     <input type="file" class="form-control excelfile">
                     <button class="btn-success btn-sm w-100" onclick="excelmarks(event)" style="
