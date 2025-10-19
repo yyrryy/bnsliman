@@ -121,7 +121,6 @@ def bonsortie(request):
 @login_required(login_url='main:home')
 def addbonsortie(request):
 
-    #current_time = datetime.now().strftime('%H:%M:%S')
     clientid=request.POST.get('clientid')
     car=request.POST.get('car')
     remise=request.POST.get('remise')=='true'
@@ -137,7 +136,11 @@ def addbonsortie(request):
     caissetarget=request.POST.get('caissetarget')
     print('>>>>>> caisse', caissetarget, totalbon, payment)
     datebon=request.POST.get('datebon')
-    datebon=datetime.strptime(f'{datebon}', '%Y-%m-%d')
+    date_part = datetime.strptime(datebon, '%Y-%m-%d').date()
+    current_time = timezone.now().time()
+    datebon_with_time = timezone.make_aware(
+        datetime.combine(date_part, current_time)
+    )
     client=Client.objects.get(pk=clientid)
     client.soldtotal=round(float(client.soldtotal)+float(totalbon), 2)
     client.soldbl=round(float(client.soldbl)+float(totalbon), 2)
@@ -163,7 +166,7 @@ def addbonsortie(request):
         remise=remise,
         client_id=clientid,
         total=totalbon,
-        date=datebon,
+        date=datebon_with_time,
         bon_no=receipt_no,
         note=note,
         paidamount=payment,
@@ -194,7 +197,7 @@ def addbonsortie(request):
                 achatids=achatids,
                 remainqties=remainqties,
                 oldqties=oldqties,
-                coutmoyen=i['coutmoyen'],
+                coutmoyen=0,
                 qty=i['qty'],
                 price=i['price'],
                 total=i['total'],
