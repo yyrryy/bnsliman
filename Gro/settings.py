@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from os.path import join
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,18 +76,26 @@ WSGI_APPLICATION = 'Gro.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'orghdata',        # Replace with your database name
-        'USER': 'postgres',     # Replace with your database user
-        'PASSWORD': 'gadwad123', # Replace with your database password
-        'HOST': 'localhost',         # Or your database server address
-        'PORT': '5432',              # Default PostgreSQL port
+usepg = os.getenv('pgdb')=='true'
+print('usepg', os.getenv('pgdb'), os.getenv('pgdb')=='false')
+if usepg:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'orghdata',        # Replace with your database name
+            'USER': 'postgres',     # Replace with your database user
+            'PASSWORD': 'gadwad123', # Replace with your database password
+            'HOST': 'localhost',         # Or your database server address
+            'PORT': '5432',              # Default PostgreSQL port
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
