@@ -49,7 +49,8 @@
     <!-- style="height: 21cm;width: 14.8cm" -->
   {% if forloop.counter == orderitems|length %}
   <!-- last iteration -->
-    <div class="px-2 d-flex flex-column postion-relative livraison{{order.id}}holder p-3" style="height: {% if A6 %}14.8cm{% else %}21cm{%endif%};width: {%if A6 %}10.5cm{%else%}14.8cm{%endif%}; margin:auto;">
+    <div class="px-2 d-flex flex-column postion-relative livraison{{order.id}}holder p-3" >
+      <!-- style="height: {% if A6 %}14.8cm{% else %}21cm{%endif%};width: {%if A6 %}10.5cm{%else%}14.8cm{%endif%}; margin:auto;" -->
       <!-- header -->
       <div class="row">
         <div class="col-3">
@@ -120,7 +121,7 @@
               <td style="white-space: nowrap; padding:3px">
                   {% for v in i %}
 
-                  {{v.product.name.upper}}
+                  {{v.product.name.upper|truncatechars:30}}
                   <br>
                   {% endfor %}
               </td>
@@ -189,12 +190,17 @@
       </div>
       <p>
         عدم تجاوز أسبوع لإرجاع البضاعة و شكرا
+        <br>
+        السلع المستعملة لا ترد، و شكرا
+        <br>
+        القطع الإلكترونية و الكهربائية لا ترد، سواء تم استعمالها او لا و شكرا
       </p>
     </div>
 
     {% else %}
     <!-- other pages -->
-    <div class="px-2 d-flex flex-column postion-relative livraison{{order.id}}holder p-3" style="height: {% if A6 %}14.8cm{% else %}21cm{%endif%};width: {%if A6 %}10.5cm{%else%}14.8cm{%endif%}; margin:auto;">
+    <div class="px-2 d-flex flex-column postion-relative livraison{{order.id}}holder p-3" >
+      <!-- style="height: {% if A6 %}14.8cm{% else %}21cm{%endif%};width: {%if A6 %}10.5cm{%else%}14.8cm{%endif%}; margin:auto;" -->
       <!-- header -->
       <div class="row">
         <div class="col-3">
